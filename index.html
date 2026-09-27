@@ -176,6 +176,17 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .knop.sec:hover{background:var(--hover-paars)}
 .status{font-size:14px;font-weight:600;min-height:1.4em}
 
+/* Compositor */
+.comp{margin-top:20px}
+.comp-kop{font-family:var(--font-titel);font-weight:800;font-size:30px;line-height:1;margin:0 0 18px}
+.chips.plain .chip span{padding:6px 14px}
+.comp-kleuren{display:grid;gap:8px}
+.comp-kleuren label{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px}
+.comp-kleuren select{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);width:190px;max-width:60%}
+.comp-check{font-size:14px;font-weight:600;margin:10px 0 0}
+.comp-acties{margin-top:14px}
+.comp .voorbeeld svg{max-width:100%}
+
 /* Typografie */
 .specimen{display:grid;gap:40px}
 .spec .onder{font-size:14px;color:var(--ink);margin:14px 0 0;padding-top:10px;border-top:1px solid var(--line)}
@@ -334,11 +345,12 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div class="intro">
         <h2 class="tactisch" id="h-avatile">Avatile maken</h2>
-        <p>Kies maat en kleur. De 11°-hoek en de afgeronde hoeken rekent de generator voor je uit. De hoekradius groeit mee met de maat.</p>
+        <p>Kies maat en kleur voor één avatile, of maak een compositie van 2 of 3 avatiles. De 11°-hoek en de afgeronde hoeken rekent de toolkit voor je uit. De hoekradius groeit mee met de maat.</p>
         <p class="regel">Vergroot of verklein je meerdere avatiles? Houd dan dezelfde verhouding tussen breedte en hoogte aan.</p>
         <p class="regel">Afstand tussen avatiles: minimaal 20% en maximaal 80% van de hoogte van de kleinste avatile.</p>
       </div>
-      <div class="paneel gen">
+      <div>
+        <div class="paneel gen">
         <div>
           <div class="veld">
             <label for="w-r">Breedte</label>
@@ -361,6 +373,36 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
             <div class="knoppen">
               <button class="knop" id="kopieer-svg" type="button">Kopieer SVG-code</button>
               <span class="status" id="svg-status" role="status"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="paneel comp" id="compositie">
+          <h3 class="comp-kop">Compositie van 2 of 3 avatiles</h3>
+          <fieldset class="veld"><legend>Gebruik</legend><div class="chips plain" id="comp-modus"></div></fieldset>
+          <p class="meta" id="comp-uitleg"></p>
+          <div class="gen" style="margin-top:18px">
+            <div>
+              <fieldset class="veld"><legend>Aantal avatiles</legend><div class="chips plain" id="comp-aantal"></div></fieldset>
+              <div id="comp-trans"></div>
+              <div id="comp-vrij" hidden>
+                <fieldset class="veld"><legend>Bewerk avatile</legend><div class="chips plain" id="comp-kies"></div></fieldset>
+                <div id="comp-vrij-schuiven"></div>
+              </div>
+              <fieldset class="veld"><legend>Kleuren (van voor naar achter)</legend><div class="comp-kleuren" id="comp-kleuren"></div></fieldset>
+              <div id="comp-ronding"></div>
+              <p class="meta" id="comp-meta"></p>
+            </div>
+            <div>
+              <div class="voorbeeld" id="comp-preview"></div>
+              <p class="comp-check" id="comp-check" role="status"></p>
+              <div class="logo-acties comp-acties" role="group" aria-label="Compositie exporteren">
+                <button type="button" class="actie" data-comp="svg">SVG downloaden</button>
+                <button type="button" class="actie" data-comp="png">PNG downloaden</button>
+                <button type="button" class="actie" data-comp="beeld">Kopieer als afbeelding</button>
+                <button type="button" class="actie" data-comp="code">Kopieer SVG-code</button>
+              </div>
+              <p class="logo-status" id="status-comp" role="status"></p>
             </div>
           </div>
         </div>
@@ -758,9 +800,9 @@ let dlCap=null;
 try{if(window.claude&&typeof window.claude.use==='function')dlCap=window.claude.use('downloads').catch(()=>null);}catch(e){}
 
 function svgMaat(svg){const m=svg.match(/viewBox="\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)\s*"/);return m?{w:+m[1],h:+m[2]}:{w:210,h:63};}
-function svgNaarPng(svg){
+function svgNaarPng(svg,schaal){
   return new Promise((resolve,reject)=>{
-    const {w,h}=svgMaat(svg),W=Math.round(w*PNG_SCHAAL),H=Math.round(h*PNG_SCHAAL);
+    const S=schaal||PNG_SCHAAL,{w,h}=svgMaat(svg),W=Math.round(w*S),H=Math.round(h*S);
     const groot=svg.replace(/<svg([^>]*?)\swidth="[^"]*"/,'<svg$1').replace(/<svg([^>]*?)\sheight="[^"]*"/,'<svg$1').replace('<svg','<svg width="'+W+'" height="'+H+'"');
     const img=new Image();
     img.onload=()=>{
@@ -790,7 +832,7 @@ function meld(kleur,tekst){
   s.textContent=tekst;clearTimeout(s._t);s._t=setTimeout(()=>{s.textContent='';},6000);
 }
 const NAAM={rood:'Rood logo',wit:'Wit logo'};
-document.querySelectorAll('.actie').forEach(btn=>{
+document.querySelectorAll('.actie[data-logo]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const kleur=btn.dataset.logo,actie=btn.dataset.actie,svg=LOGO[kleur],bestand='avans-logo-'+kleur;
     if(btn.getAttribute('aria-busy')==='true')return;
@@ -810,6 +852,208 @@ document.querySelectorAll('.actie').forEach(btn=>{
       try{p=navigator.clipboard.write([new ClipboardItem({'image/png':svgNaarPng(svg)})]);}catch(e){p=Promise.reject(e);}
       klaar(p.then(()=>meld(kleur,kleur==='wit'?'Wit logo gekopieerd als PNG met transparante achtergrond':'Rood logo gekopieerd als afbeelding'))
         .catch(()=>meld(kleur,'Kopiëren als afbeelding is hier geblokkeerd. Gebruik PNG downloaden.')));
+    }
+  });
+});
+
+/* ===== Avatile-compositor (2 of 3 avatiles) =====
+   Model: een lijst avatiles {x,y,w,h,kleur}, index 0 = voorste. x,y,w,h beschrijven de ZICHTBARE vorm,
+   inclusief afronding: y = bovenkant, x = linkeronderhoek, w = breedte van de onderkant.
+   compositieSVG(lijst) zet elke lijst om in vectorvormen. Een latere patroon- of gridgenerator
+   kan dezelfde lijst leveren en deze renderer en export hergebruiken. */
+const KLEURCOMBI=new Set([['avans-rood','helder-rood'],['sociaal-oranje','helder-rood'],['helder-rood','kalm-paars'],['actief-blauw','kalm-paars'],['avans-rood','kalm-paars'],['sociaal-oranje','kalm-paars'],['helder-rood','actief-blauw'],['actief-blauw','slim-donkerblauw'],['avans-rood','sociaal-oranje'],['avans-rood','actief-blauw'],['helder-rood','slim-donkerblauw'],['slim-donkerblauw','kalm-paars']].map(p=>p.sort().join('+')));
+const magSamen=(a,b)=>KLEURCOMBI.has([a,b].sort().join('+'));
+const r2=v=>Math.round(v*100)/100;
+function avatileVorm(a,ronding){
+  /* Radius: eigen keuze (b + h) / 40, gekoppeld aan de grootte; met de rondingsfactor bij te stellen. */
+  const r=Math.min(ronding*(a.w+a.h)/40,a.w/4,a.h/4);
+  const ph=a.h-2*r,pw=a.w-2*r,off=ph*TAN11,x0=a.x+r,y0=a.y+r;
+  return {r,off,pts:[[x0+off,y0],[x0+off+pw,y0],[x0+pw,y0+ph],[x0,y0+ph]]};
+}
+function compositieSVG(lijst,ronding){
+  const v=lijst.map(a=>Object.assign({a},avatileVorm(a,ronding)));
+  const minX=Math.min(...lijst.map(a=>a.x)),minY=Math.min(...lijst.map(a=>a.y));
+  const maxX=Math.max(...v.map(o=>o.a.x+o.a.w+o.off)),maxY=Math.max(...lijst.map(a=>a.y+a.h));
+  const W=Math.ceil(maxX-minX),H=Math.ceil(maxY-minY);
+  const vormen=v.slice().reverse().map(o=>{
+    const hex=vind6(o.a.kleur).hex;
+    const pts=o.pts.map(q=>r2(q[0]-minX)+','+r2(q[1]-minY)).join(' ');
+    return `  <polygon points="${pts}" style="fill:${hex}; stroke:${hex}; stroke-width:${r2(o.r*2)}px; stroke-linejoin:round;"/>`;
+  }).join('\n');
+  return {code:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">\n${vormen}\n</svg>`,W,H,vormen:v};
+}
+const vind6=id=>KLEUREN.find(k=>k.id===id);
+
+/* Transformerend: één systeem voor alle avatiles.
+   Groei is evenredig (100%, 100+g%, 100+2g%), afstanden zijn gelijk per stap. */
+function transformLijst(s,kleuren){
+  const dx=s.dx/100*s.h0,dy=s.dy/100*s.h0,out=[];
+  for(let i=0;i<s.n;i++){
+    const f=1+i*s.groei/100,w=s.w0*f,h=s.h0*f;
+    out.push({x:s.w0+i*dx-w,y:-i*dy,w,h,kleur:kleuren[i]});
+  }
+  return out;
+}
+/* Controle op de merkgidsregels voor transformerend gebruik. Geeft een lijst met afwijkingen terug. */
+function controleerTransform(lijst){
+  const fouten=[],eps=0.01,hMin=Math.min(...lijst.map(a=>a.h));
+  const binnen=g=>Math.abs(g)<eps||(g>=0.2*hMin-eps&&g<=0.8*hMin+eps);
+  for(let i=0;i+1<lijst.length;i++){
+    const a=lijst[i],b=lijst[i+1];
+    const gr=(b.x+b.w)-(a.x+a.w),gt=a.y-b.y;
+    if(!binnen(gr))fouten.push('afstand rechts');
+    if(!binnen(gt))fouten.push('afstand boven');
+    if(Math.abs(gr)<eps&&Math.abs(gt)<eps&&Math.abs(b.w-a.w)<eps)fouten.push('avatiles vallen samen');
+    if(Math.abs(a.w/a.h-b.w/b.h)>1e-6)fouten.push('verhouding');
+  }
+  if(lijst.length===3){
+    const st=k=>[lijst[1][k]-lijst[0][k],lijst[2][k]-lijst[1][k]];
+    ['w','h','y'].forEach(k=>{const[d1,d2]=st(k);if(Math.abs(d1-d2)>eps)fouten.push('ongelijke stap '+k);});
+    const rx=[(lijst[1].x+lijst[1].w)-(lijst[0].x+lijst[0].w),(lijst[2].x+lijst[2].w)-(lijst[1].x+lijst[1].w)];
+    if(Math.abs(rx[0]-rx[1])>eps)fouten.push('ongelijke stap x');
+  }
+  for(let i=0;i+1<lijst.length;i++)if(!magSamen(lijst[i].kleur,lijst[i+1].kleur))fouten.push('kleurcombinatie');
+  return fouten;
+}
+
+const comp={modus:'trans',n:3,sel:0,ronding:100,
+  kleuren:['helder-rood','kalm-paars','actief-blauw'],
+  trans:{w0:100,h0:100,groei:50,dx:50,dy:50},
+  vrij:[{x:0,y:100,w:100,h:100},{x:25,y:50,w:150,h:150},{x:50,y:0,w:200,h:200}]};
+let compCode='';
+
+function keuzeChips(el,naam,opties,gekozen,opChange){
+  el.innerHTML='';
+  opties.forEach(o=>{
+    const l=document.createElement('label');l.className='chip';
+    l.innerHTML=`<input type="radio" name="${naam}" value="${o.id}" ${o.id===gekozen?'checked':''}><span>${o.naam}</span>`;
+    l.querySelector('input').addEventListener('change',()=>opChange(o.id));
+    el.appendChild(l);
+  });
+}
+/* Schuif + getalveld; snap() bewaakt toegestane waarden. */
+function maakSchuif(el,id,label,min,max,step,waarde,eenheid,opZet,snap){
+  const d=document.createElement('div');d.className='veld';
+  d.innerHTML=`<label for="${id}-r">${label}</label><div class="schuif"><input type="range" id="${id}-r" min="${min}" max="${max}" step="${step}" value="${waarde}"><input type="number" id="${id}-n" min="${min}" max="${max}" step="${step}" value="${waarde}" aria-label="${label} in ${eenheid}"></div>`;
+  el.appendChild(d);
+  const r=d.querySelector('input[type=range]'),n=d.querySelector('input[type=number]');
+  const zet=v=>{v=Math.max(min,Math.min(max,Math.round((+v||0)/step)*step));if(snap)v=snap(v);r.value=v;n.value=v;opZet(v);};
+  r.addEventListener('input',()=>zet(r.value));n.addEventListener('change',()=>zet(n.value));
+  return {zet:v=>{r.value=v;n.value=v;}};
+}
+/* 0 = randen gelijk; anders 20 tot 80% (merkgids). Waarden tussen 0 en 20 springen naar de dichtstbijzijnde toegestane waarde. */
+const snapAfstand=v=>v>0&&v<20?(v<10?0:20):v;
+
+const elTrans=document.getElementById('comp-trans');
+const sT={};
+sT.w0=maakSchuif(elTrans,'ct-w','Breedte kleinste avatile',40,300,5,comp.trans.w0,'pixels',v=>{comp.trans.w0=v;tekenComp();});
+sT.h0=maakSchuif(elTrans,'ct-h','Hoogte kleinste avatile',40,300,5,comp.trans.h0,'pixels',v=>{comp.trans.h0=v;tekenComp();});
+sT.groei=maakSchuif(elTrans,'ct-g','Vergroting per stap (%)',0,100,10,comp.trans.groei,'procent',v=>{comp.trans.groei=v;tekenComp();});
+sT.dx=maakSchuif(elTrans,'ct-dx','Afstand rechts per stap (% van kleinste hoogte)',0,80,5,comp.trans.dx,'procent',v=>{comp.trans.dx=v;if(v===0&&comp.trans.dy===0){comp.trans.dy=20;sT.dy.zet(20);}tekenComp();},snapAfstand);
+sT.dy=maakSchuif(elTrans,'ct-dy','Afstand boven per stap (% van kleinste hoogte)',0,80,5,comp.trans.dy,'procent',v=>{comp.trans.dy=v;if(v===0&&comp.trans.dx===0){comp.trans.dx=20;sT.dx.zet(20);}tekenComp();},snapAfstand);
+
+const elVrij=document.getElementById('comp-vrij-schuiven');
+const sV={};
+function bouwVrijeSchuiven(){
+  elVrij.innerHTML='';const a=comp.vrij[comp.sel];
+  sV.w=maakSchuif(elVrij,'cv-w','Breedte',40,400,5,a.w,'pixels',v=>{a.w=v;tekenComp();});
+  sV.h=maakSchuif(elVrij,'cv-h','Hoogte',40,400,5,a.h,'pixels',v=>{a.h=v;tekenComp();});
+  sV.x=maakSchuif(elVrij,'cv-x','Positie horizontaal',0,600,5,a.x,'pixels',v=>{a.x=v;tekenComp();});
+  sV.y=maakSchuif(elVrij,'cv-y','Positie verticaal',0,600,5,a.y,'pixels',v=>{a.y=v;tekenComp();});
+}
+function bouwKies(){
+  if(comp.sel>=comp.n)comp.sel=0;
+  keuzeChips(document.getElementById('comp-kies'),'compkies',Array.from({length:comp.n},(_,i)=>({id:String(i),naam:'Avatile '+(i+1)})),String(comp.sel),id=>{comp.sel=+id;bouwVrijeSchuiven();});
+  bouwVrijeSchuiven();
+}
+maakSchuif(document.getElementById('comp-ronding'),'cr','Hoekafronding (% van standaard)',75,125,5,comp.ronding,'procent',v=>{comp.ronding=v;tekenComp();});
+
+/* Kleuren: elke avatile vormt met de vorige een combinatie uit de merkgids. Ongeldige keuzes zijn uitgeschakeld. */
+function bouwKleuren(melding){
+  const el=document.getElementById('comp-kleuren');el.innerHTML='';
+  for(let i=0;i<comp.n;i++){
+    const l=document.createElement('label');
+    const pos=i===0?'voorste':(i===comp.n-1?'achterste':'midden');
+    l.innerHTML=`<span>Avatile ${i+1} (${pos})</span>`;
+    const s=document.createElement('select');s.setAttribute('aria-label','Kleur avatile '+(i+1));
+    KLEUREN.forEach(k=>{const o=document.createElement('option');o.value=k.id;o.textContent=k.naam;
+      if(i>0&&!magSamen(comp.kleuren[i-1],k.id)){o.disabled=true;o.textContent+=' (niet met '+vind6(comp.kleuren[i-1]).naam+')';}
+      o.selected=k.id===comp.kleuren[i];s.appendChild(o);});
+    s.addEventListener('change',()=>{comp.kleuren[i]=s.value;const m=herstelKleuren(i);bouwKleuren(m);tekenComp();document.querySelector('#comp-kleuren select[aria-label="Kleur avatile '+(i+1)+'"]').focus();});
+    l.appendChild(s);el.appendChild(l);
+  }
+  if(melding)meld('comp',melding);
+}
+function herstelKleuren(vanaf){
+  let m='';
+  for(let i=Math.max(1,vanaf+1);i<3;i++){
+    if(!magSamen(comp.kleuren[i-1],comp.kleuren[i])){
+      const oud=vind6(comp.kleuren[i]).naam;
+      comp.kleuren[i]=KLEUREN.find(k=>magSamen(comp.kleuren[i-1],k.id)).id;
+      if(i<comp.n)m+=`Kleur avatile ${i+1} aangepast naar ${vind6(comp.kleuren[i]).naam}: ${oud} en ${vind6(comp.kleuren[i-1]).naam} zijn geen toegestane combinatie. `;
+    }
+  }
+  return m.trim();
+}
+
+function huidigeLijst(){
+  if(comp.modus==='trans')return transformLijst(Object.assign({n:comp.n},comp.trans),comp.kleuren);
+  return comp.vrij.slice(0,comp.n).map((a,i)=>({x:a.x,y:a.y,w:a.w,h:a.h,kleur:comp.kleuren[i]}));
+}
+const nl2=v=>r1(v).toString().replace('.',',');
+function tekenComp(){
+  const lijst=huidigeLijst(),res=compositieSVG(lijst,comp.ronding/100);compCode=res.code;
+  const beschr=lijst.map((a,i)=>`avatile ${i+1} ${vind6(a.kleur).naam} ${Math.round(a.w)} bij ${Math.round(a.h)} pixels`).join(', ');
+  document.getElementById('comp-preview').innerHTML=res.code.replace('<svg ',`<svg role="img" aria-label="Compositie: ${beschr}" `);
+  const meta=document.getElementById('comp-meta'),chk=document.getElementById('comp-check');
+  const radii=res.vormen.map(o=>nl2(o.r)).join(' / ');
+  if(comp.modus==='trans'){
+    const s=comp.trans,h0=s.h0;
+    const vb=lijst[1].y+lijst[1].h-(lijst[0].y+lijst[0].h);
+    meta.innerHTML=`Maten: ${lijst.map(a=>Math.round(a.w)+' × '+Math.round(a.h)).join(', ')} px (${lijst.map((a,i)=>100+i*s.groei+'%').join(', ')}).<br>`+
+      `Afstand per stap: rechts ${nl2(s.dx/100*h0)} px, boven ${nl2(s.dy/100*h0)} px. De kleinste avatile is ${h0} px hoog.<br>`+
+      `Onderkant verschuift ${nl2(Math.abs(vb))} px per stap${vb===0?' (onderkanten gelijk)':''}.<br>Hoekradius: ${radii} px.`;
+    const f=controleerTransform(lijst);
+    chk.textContent=f.length?'Let op: '+f.join(', '):'✓ Evenredige groei, gelijkmatige verplaatsing, afstanden binnen 20–80%.';
+  }else{
+    meta.innerHTML=`Maten: ${lijst.map(a=>Math.round(a.w)+' × '+Math.round(a.h)).join(', ')} px.<br>Hoekradius: ${radii} px.<br>De 11°-hoek en de afronding blijven per avatile behouden.`;
+    chk.textContent='✓ Elke avatile behoudt de 11°-hoek. Kleurcombinaties volgen de merkgids.';
+  }
+}
+function zetModus(m){
+  if(m==='vrij'&&comp.modus==='trans'){
+    /* Neem de transformerende compositie over als startpunt voor vrij gebruik. */
+    const l=transformLijst(Object.assign({n:3},comp.trans),comp.kleuren),mx=Math.min(...l.map(a=>a.x)),my=Math.min(...l.map(a=>a.y));
+    comp.vrij=l.map(a=>({x:Math.round(a.x-mx),y:Math.round(a.y-my),w:Math.round(a.w),h:Math.round(a.h)}));
+  }
+  comp.modus=m;
+  document.getElementById('comp-trans').hidden=m!=='trans';
+  document.getElementById('comp-vrij').hidden=m!=='vrij';
+  document.getElementById('comp-uitleg').textContent=m==='trans'
+    ?'Transformerend: de avatiles vormen een ritmische reeks. Groei is evenredig, verplaatsing gelijkmatig, en de afstand tussen de avatiles ligt tussen 20% en 80% van de hoogte van de kleinste avatile. De toolkit bewaakt dit.'
+    :'Niet-transformerend: formaat en positie per avatile zijn vrij. De 11°-hoek en de meeschalende afronding blijven behouden.';
+  if(m==='vrij')bouwKies();
+  tekenComp();
+}
+keuzeChips(document.getElementById('comp-modus'),'compmodus',[{id:'trans',naam:'Transformerend'},{id:'vrij',naam:'Niet-transformerend'}],'trans',zetModus);
+keuzeChips(document.getElementById('comp-aantal'),'compaantal',[{id:'2',naam:'2'},{id:'3',naam:'3'}],'3',v=>{comp.n=+v;bouwKleuren();if(comp.modus==='vrij')bouwKies();tekenComp();});
+bouwKleuren();zetModus('trans');
+
+document.querySelectorAll('.actie[data-comp]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const actie=btn.dataset.comp,svg=compCode;
+    if(btn.getAttribute('aria-busy')==='true')return;
+    const bezig=p=>{btn.setAttribute('aria-busy','true');Promise.resolve(p).finally(()=>btn.removeAttribute('aria-busy'));};
+    if(actie==='svg'){
+      bezig(bewaar('avans-avatiles.svg',svg,'image/svg+xml').then(r=>meld('comp',r==='ok'?'SVG gedownload':r==='geannuleerd'?'Download geannuleerd':'Downloaden lukte niet')));
+    }else if(actie==='png'){
+      bezig(svgNaarPng(svg,2).then(b=>bewaar('avans-avatiles.png',b,'image/png')).then(r=>meld('comp',r==='ok'?'PNG gedownload (transparante achtergrond)':r==='geannuleerd'?'Download geannuleerd':'Downloaden lukte niet')).catch(()=>meld('comp','PNG maken lukte niet in deze browser')));
+    }else if(actie==='code'){
+      bezig(kopieer(svg).then(ok=>meld('comp',ok?'SVG-code gekopieerd':'Kopiëren lukte niet. Download de SVG en open die in een teksteditor.')));
+    }else{
+      if(!(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem)){meld('comp','Je browser kan geen afbeelding naar het klembord kopiëren. Gebruik PNG downloaden.');return;}
+      let p;try{p=navigator.clipboard.write([new ClipboardItem({'image/png':svgNaarPng(svg,2)})]);}catch(e){p=Promise.reject(e);}
+      bezig(p.then(()=>meld('comp','Compositie gekopieerd als afbeelding')).catch(()=>meld('comp','Kopiëren als afbeelding is hier geblokkeerd. Gebruik PNG downloaden.')));
     }
   });
 });
