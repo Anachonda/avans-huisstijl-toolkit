@@ -398,7 +398,8 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
               <div id="comp-basis"></div>
               <div id="comp-trans">
                 <fieldset class="veld"><legend>Vorm</legend><div class="chips plain" id="comp-vorm"></div></fieldset>
-                <fieldset class="veld"><legend>Schaalfactor per stap</legend><div class="chips plain" id="comp-schaal"></div></fieldset>
+                <fieldset class="veld"><legend>Vergroting per stap</legend><div class="chips plain" id="comp-groei"></div></fieldset>
+                <fieldset class="veld"><legend>Onderkant</legend><div class="chips plain" id="comp-onder"></div></fieldset>
                 <div id="comp-afstand"></div>
               </div>
               <div id="comp-vrij" hidden>
@@ -1097,53 +1098,76 @@ function compositieSVG(lijst){
   return {code:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">\n${vormen}\n</svg>`,W,H,vormen:v};
 }
 const vind6=id=>KLEUREN.find(k=>k.id===id);
-/* Plaats avatile b achter a: bovenkant d hoger, schuine rechterrand d verder naar rechts. */
-function plaatsAchter(a,b,d){
-  b.y=a.y-d;
-  b.x=0;const verschil=rechterrand(a,b.y)+d-rechterrand(b,b.y);b.x=verschil;
-  return b;
-}
+/* x van de zichtbare linkerrand (schuin, 11°) op hoogte yy */
+function linkerrand(a,yy){const r=radius(a);return a.x+r+(a.y+a.h-r-yy)*TAN11-r/COS11;}
 
-/* Transformerend: elke volgende avatile = vorige × schaalfactor s, verplaatst met dezelfde afstand d.
-   De rechterbovenhoek schuift daardoor elke stap met dezelfde vector op. */
+/* Transformerend, zoals in de merkgidsvoorbeelden: de kleinste avatile staat linksonder,
+   elke volgende avatile groeit in een gelijke stap (100%, 100+g%, 100+2g%) en steekt alleen
+   boven en rechts uit. Rechts ligt steeds afstand d; de onderkant blijft gelijk of stijgt gelijkmatig. */
 function transformLijst(s,kleuren){
-  const d=s.afstand/100*s.h0,out=[{x:0,y:0,w:s.h0*s.vorm,h:s.h0,kleur:kleuren[0]}];
-  for(let i=1;i<s.n;i++){
-    const p=out[i-1];
-    out.push(plaatsAchter(p,{w:p.w*s.schaal,h:p.h*s.schaal,kleur:kleuren[i]},d));
+  const d=s.afstand/100*s.h0,w0=s.h0*s.vorm,g=s.groei/100,out=[];
+  for(let i=0;i<s.n;i++){
+    const w=w0*(1+i*g),h=s.h0*(1+i*g);
+    const bodem=s.onder==='gelijk'?0:-i*(d-g*s.h0);
+    const a={w,h,y:bodem-h,x:0,kleur:kleuren[i]};
+    if(i>0){const p=out[i-1];a.x=rechterrand(p,a.y)+d-rechterrand(a,a.y);}
+    out.push(a);
   }
   return out;
+}
+/* Kleinste toegestane afstand (in % van de kleinste hoogte) bij deze groei, vorm en onderkant:
+   de volgende avatile mag niet links of onder de vorige uitsteken. */
+function minAfstand(groei,vorm,onder){
+  /* +5: de kleinere avatile moet links echt uitsteken, niet precies gelijk liggen. */
+  let m=Math.max(20,groei?groei*vorm+5:20);
+  if(onder==='traps')m=Math.max(m,groei+5);
+  return Math.ceil(m/5-1e-9)*5;
 }
 /* Niet-transformerend: formaat en vorm per avatile uit vaste keuzes; posities berekent de toolkit. */
 function vrijLijst(v,kleuren){
   const basis=v.h0,lijst=v.av.slice(0,v.n).map((a,i)=>({w:basis*a.g*VORMEN[a.vorm].f,h:basis*a.g,kleur:kleuren[i]}));
+  const hMin=Math.min(...lijst.map(a=>a.h));
   if(v.opstelling==='overlap'){
-    const hMin=Math.min(...lijst.map(a=>a.h)),d=0.35*hMin;
-    lijst[0].x=0;lijst[0].y=-lijst[0].h;
-    for(let i=1;i<lijst.length;i++)plaatsAchter(lijst[i-1],lijst[i],d);
+    /* Onderkanten gelijk; elke volgende (grotere) avatile een vaste stap naar rechts. */
+    const stap=0.35*hMin;
+    lijst.forEach((a,i)=>{a.y=-a.h;a.x=0;if(i>0){const p=lijst[i-1];a.x=linkerrand(p,a.y)+stap-linkerrand(a,a.y);}});
   }else{
-    const hMin=Math.min(...lijst.map(a=>a.h)),gap=0.5*hMin;let bodem=0,x=0;
-    lijst.forEach((a,i)=>{a.x=x;a.y=bodem-a.h;x=rechterrand(a,a.y)+gap;bodem-=0.5*a.h;});
+    const gap=0.5*hMin;let bodem=0,x=0;
+    lijst.forEach(a=>{a.x=x;a.y=bodem-a.h;x=rechterrand(a,a.y)+gap;bodem-=0.5*a.h;});
   }
   return lijst;
 }
-/* Controles op expliciete merkgidsregels. Geeft [{ok,tekst}] terug. */
+/* Ligt avatile a volledig binnen b? (vergelijking van de evenwijdige randen) */
+function binnen(a,b){
+  const e=0.01;
+  return b.y<=a.y+e&&b.y+b.h>=a.y+a.h-e&&linkerrand(b,a.y)<=linkerrand(a,a.y)+e&&rechterrand(b,a.y)>=rechterrand(a,a.y)-e;
+}
+/* Controles. Geeft [{ok,tekst}] terug. */
 function controleer(lijst,modus,s){
   const uit=[],eps=0.05,hMin=Math.min(...lijst.map(a=>a.h));
   if(modus==='trans'){
-    let schaalOk=true,vecOk=true,afstOk=true;const vec=[],afst=[];
+    let groeiOk=true,vecOk=true,afstOk=true,uitstekOk=true;const stapH=[],vec=[],afstR=[],afstB=[];
     for(let i=0;i+1<lijst.length;i++){
       const a=lijst[i],b=lijst[i+1];
-      if(Math.abs(b.w/a.w-s.schaal)>1e-6||Math.abs(b.h/a.h-s.schaal)>1e-6)schaalOk=false;
-      vec.push([rechterrand(b,b.y)-rechterrand(a,a.y),b.y-a.y]);
-      afst.push(a.y-b.y,rechterrand(b,a.y)-rechterrand(a,a.y));
+      stapH.push(b.h-a.h);
+      if(Math.abs(b.w/b.h-a.w/a.h)>1e-6)groeiOk=false;
+      vec.push([linkerrand(b,b.y+b.h)-linkerrand(a,a.y+a.h),(b.y+b.h)-(a.y+a.h)]);
+      afstR.push(rechterrand(b,a.y)-rechterrand(a,a.y));afstB.push(a.y-b.y);
+      if(linkerrand(b,a.y)<linkerrand(a,a.y)-eps||b.y+b.h>a.y+a.h+eps)uitstekOk=false;
     }
+    if(stapH.length>1&&Math.abs(stapH[0]-stapH[1])>eps)groeiOk=false;
     if(vec.length>1&&(Math.abs(vec[0][0]-vec[1][0])>eps||Math.abs(vec[0][1]-vec[1][1])>eps))vecOk=false;
-    afst.forEach(g=>{if(g<0.2*hMin-eps||g>0.8*hMin+eps)afstOk=false;});
-    uit.push({ok:schaalOk,tekst:schaalOk?`Evenredig: elke avatile is ${String(s.schaal).replace('.',',')} × de vorige.`:'Schaalfactor niet constant.'});
+    const inRegel=g=>g>=0.2*hMin-eps&&g<=0.8*hMin+eps;
+    afstR.forEach(g=>{if(!inRegel(g))afstOk=false;});
+    afstB.forEach(g=>{if(Math.abs(g)>eps&&!inRegel(g))afstOk=false;});
+    uit.push({ok:groeiOk,tekst:groeiOk?(s.groei?`Evenredig: elke stap ${s.groei}% van de kleinste avatile groter.`:'Geen vergroting: alle avatiles even groot.'):'Groei niet evenredig.'});
     uit.push({ok:vecOk,tekst:vecOk?'Gelijkmatig: elke stap dezelfde verplaatsing.':'Verplaatsing niet gelijkmatig.'});
-    uit.push({ok:afstOk,tekst:afstOk?`Afstand ${nl2(afst[0])} px: tussen 20% en 80% van de hoogte van de kleinste avatile (merkgids).`:'Afstand buiten 20–80% van de kleinste hoogte.'});
+    uit.push({ok:afstOk,tekst:afstOk?`Afstand rechts ${nl2(afstR[0])} px, boven ${nl2(afstB[0])} px: 0 of tussen 20% en 80% van de hoogte van de kleinste avatile (merkgids).`:'Afstand buiten 20–80% van de kleinste hoogte.'});
+    uit.push({ok:uitstekOk,tekst:uitstekOk?'De kleinste avatile staat linksonder; de grotere steken alleen boven en rechts uit.':'Een avatile steekt links of onder de vorige uit.'});
   }
+  let ingesloten=false;
+  lijst.forEach((a,i)=>lijst.forEach((b,j)=>{if(i!==j&&binnen(a,b))ingesloten=true;}));
+  uit.push({ok:!ingesloten,tekst:ingesloten?'Een avatile valt helemaal binnen een andere.':'Geen avatile valt binnen een andere.'});
   const kl=lijst.map(a=>a.kleur),verschillend=new Set(kl).size===kl.length,kOk=verschillend&&setGeldig(kl);
   uit.push({ok:kOk,tekst:kOk?(kl.length===2?'De kleurcombinatie staat in de merkgids.':'Alle kleurparen in deze compositie staan in de merkgids.'):'Deze kleurcombinatie staat niet in de merkgids.'});
   return uit;
@@ -1153,7 +1177,7 @@ const VORMEN={liggend:{naam:'Liggend (3:2)',f:1.5},vierkant:{naam:'Vierkant (1:1
 const GROOTTES={1:'Klein',1.5:'Middel',2:'Groot',3:'Extra groot'};
 const comp={modus:'trans',n:3,h0:100,
   kleuren:['helder-rood','kalm-paars','actief-blauw'],
-  trans:{vorm:1,schaal:1.5,afstand:50},
+  trans:{vorm:1,groei:50,onder:'gelijk',afstand:50},
   vrij:{opstelling:'overlap',av:[{g:1,vorm:'vierkant'},{g:1.5,vorm:'liggend'},{g:2,vorm:'staand'}]}};
 let compCode='';
 
@@ -1178,9 +1202,23 @@ function maakSchuif(el,id,label,min,max,step,waarde,eenheid,opZet,snap){
 }
 
 maakSchuif(document.getElementById('comp-basis'),'cb','Hoogte kleinste avatile',60,240,10,comp.h0,'pixels',v=>{comp.h0=v;tekenComp();});
-keuzeChips(document.getElementById('comp-vorm'),'compvorm',Object.entries(VORMEN).map(([id,o])=>({id:String(o.f),naam:o.naam})),'1',v=>{comp.trans.vorm=+v;tekenComp();});
-keuzeChips(document.getElementById('comp-schaal'),'compschaal',[1,1.25,1.5,2].map(f=>({id:String(f),naam:f===1?'1 (geen vergroting)':String(f).replace('.',',')})),'1.5',v=>{comp.trans.schaal=+v;tekenComp();});
-maakSchuif(document.getElementById('comp-afstand'),'ca','Afstand tussen avatiles (% van hoogte kleinste avatile)',20,80,5,comp.trans.afstand,'procent',v=>{comp.trans.afstand=v;tekenComp();});
+/* Keuzes die met de huidige instellingen geen geldige reeks opleveren, zijn uitgeschakeld. */
+function keuzeChipsUit(el,naam,opties,gekozen,opChange){
+  keuzeChips(el,naam,opties,gekozen,opChange);
+  opties.forEach((o,i)=>{if(o.uit){const inp=el.querySelectorAll('input')[i];inp.disabled=true;el.querySelectorAll('.chip span')[i].style.opacity='.45';inp.setAttribute('aria-label',o.naam+' (niet mogelijk met deze vorm en onderkant)');}});
+}
+function bouwTransBediening(){
+  const s=comp.trans;
+  /* Maak de instellingen eerst geldig. */
+  while(minAfstand(s.groei,s.vorm,s.onder)>80){if(s.onder==='traps'&&minAfstand(s.groei,s.vorm,'gelijk')<=80)s.onder='gelijk';else s.groei-=25;}
+  const mn=minAfstand(s.groei,s.vorm,s.onder);s.afstand=Math.max(mn,Math.min(80,s.afstand));
+  keuzeChipsUit(document.getElementById('comp-vorm'),'compvorm',Object.values(VORMEN).map(o=>({id:String(o.f),naam:o.naam,uit:minAfstand(s.groei,o.f,s.onder)>80})),String(s.vorm),v=>{s.vorm=+v;bouwTransBediening();tekenComp();});
+  keuzeChipsUit(document.getElementById('comp-groei'),'compgroei',[0,25,50,75].map(g=>({id:String(g),naam:g?g+'%':'Geen',uit:minAfstand(g,s.vorm,s.onder)>80})),String(s.groei),v=>{s.groei=+v;bouwTransBediening();tekenComp();});
+  keuzeChipsUit(document.getElementById('comp-onder'),'componder',[{id:'gelijk',naam:'Gelijk'},{id:'traps',naam:'Trapsgewijs omhoog',uit:minAfstand(s.groei,s.vorm,'traps')>80}],s.onder,v=>{s.onder=v;bouwTransBediening();tekenComp();});
+  const el=document.getElementById('comp-afstand');el.innerHTML='';
+  maakSchuif(el,'ca',`Afstand rechts (% van hoogte kleinste avatile, hier ${mn<80?mn+'–80%':'alleen 80%'})`,mn,80,5,s.afstand,'procent',v=>{s.afstand=v;tekenComp();});
+}
+bouwTransBediening();
 keuzeChips(document.getElementById('comp-opstelling'),'compopst',[{id:'overlap',naam:'Overlappend'},{id:'los',naam:'Los van elkaar'}],'overlap',v=>{comp.vrij.opstelling=v;bouwVrijeMaten();tekenComp();});
 
 const GLIJST=Object.keys(GROOTTES).map(Number).sort((a,b)=>a-b);
@@ -1268,8 +1306,8 @@ function zetModus(m){
   document.getElementById('comp-trans').hidden=m!=='trans';
   document.getElementById('comp-vrij').hidden=m!=='vrij';
   document.getElementById('comp-uitleg').textContent=m==='trans'
-    ?'Transformerend: elke volgende avatile is de vorige, vergroot met dezelfde schaalfactor en verplaatst met dezelfde afstand. De afstand ligt altijd tussen 20% en 80% van de hoogte van de kleinste avatile.'
-    :'Niet-transformerend: je kiest per avatile een formaat en een vorm. De toolkit plaatst de avatiles. Bij overlappend is elke avatile verder naar achteren groter, zodat ze allemaal zichtbaar blijven. De 11°-hoek blijft altijd behouden.';
+    ?'Transformerend: de kleinste avatile staat linksonder. Elke volgende avatile is een gelijke stap groter en steekt alleen boven en rechts uit. De afstand ligt altijd tussen 20% en 80% van de hoogte van de kleinste avatile. Instellingen die dat onmogelijk maken, zijn uitgeschakeld.'
+    :'Niet-transformerend: je kiest per avatile een formaat en een vorm. De toolkit plaatst de avatiles. Bij overlappend staan de onderkanten gelijk en is elke avatile verder naar achteren groter, zodat ze allemaal zichtbaar blijven en geen avatile binnen een andere valt. De 11°-hoek blijft altijd behouden.';
   document.querySelector('label[for="cb-r"]').textContent=m==='trans'?'Hoogte kleinste avatile':'Hoogte bij formaat Klein';
   if(m==='vrij')bouwVrijeMaten();
   tekenComp();
