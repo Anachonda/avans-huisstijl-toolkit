@@ -46,7 +46,6 @@
   --font-titel:'Sofia Sans Extra Condensed','Arial Narrow',Arial,sans-serif;
   --font-body:'Hanken Grotesk',Arial,Helvetica,sans-serif;
   --bg:#FFFFFF;--surface:#F4F4F4;--ink:#000000;--line:#DADADA;--title:#C6002A;
-  --ok:#001A6A;--fail:#C6002A;
   /* Eigen keuze, niet uit de merkgids: hoverkleuren van de knoppen */
   --hover-rood:#A80024;--hover-paars:#D2A6FF;
   /* Eigen keuze: één radius voor alle kaarten en panelen */
@@ -191,21 +190,25 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .glyph .aa{font-size:64px;line-height:1}
 .glyph small{display:block;font-size:13px;color:var(--ink);margin-top:8px}
 
-/* Contrast */
-.contrast{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-@media (max-width:1000px){.contrast{grid-template-columns:1fr}}
-.proef{border-radius:var(--radius);padding:28px;min-height:220px;display:flex;flex-direction:column;justify-content:center;gap:10px;box-shadow:inset 0 0 0 1px var(--line)}
-.proef .groot{font-family:var(--font-titel);font-weight:800;font-size:40px;line-height:1}
-.proef .klein{font-size:16px;margin:0}
-.cijfer{font-family:var(--font-titel);font-weight:800;font-size:88px;line-height:.9;margin:22px 0 4px}
-.oordelen{display:grid;gap:10px;margin-top:18px}
-.oordeel{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border-radius:var(--radius);padding:12px 14px}
-.oordeel span{font-size:15px}
-.label{font-weight:700;font-size:14px;padding:5px 12px;border-radius:999px;color:#fff;white-space:nowrap}
-.label.ok{background:var(--ok);box-shadow:0 0 0 1px var(--line)}.label.nee{background:var(--fail)}
-.tips{list-style:none;margin:16px 0 0;padding:0;font-size:14px;display:grid;gap:6px}
-.tips li{padding-left:12px;border-left:3px solid var(--kalm-paars)}
-.wissel{margin-top:4px}
+/* Tekstkleur */
+.tk-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4px}
+@media (max-width:760px){.tk-grid{grid-template-columns:1fr}}
+.tk-tegel h3{font-family:var(--font-body);font-size:15px;font-weight:600;margin:0 0 8px}
+.tk-optie+.tk-optie{margin-top:12px}
+.tk-vlak{border-radius:var(--radius);padding:24px;min-height:150px;display:flex;align-items:center;box-shadow:inset 0 0 0 1px var(--line);position:relative;overflow:hidden}
+.tk-vlak .t{font-family:var(--font-titel);font-weight:800;font-style:italic;text-transform:uppercase;font-size:44px;line-height:.88;margin:0}
+.tk-vlak .b{font-size:16px;line-height:1.6;margin:0;max-width:26em}
+.tk-info{font-size:14px;margin:8px 0 0}
+.tk-info b{font-weight:700}
+.tk-geen{font-size:15px;margin:0;padding:16px 0}
+.tk-beeld-donker{background:radial-gradient(circle at 75% 30%,#3B4A5C 0,#1B2430 45%,#0B0F14 100%)}
+.tk-beeld-licht{background:radial-gradient(circle at 30% 35%,#FFFFFF 0,#E9EEF2 40%,#C9D3DB 100%)}
+.tk-beeld-donker,.tk-beeld-licht{padding-top:48px}
+.tk-beeld-label{position:absolute;top:10px;right:12px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:#FFFFFF;color:#000}
+.tk-avatile{position:relative;display:inline-block}
+.tk-avatile svg{display:block;width:260px;max-width:100%;height:auto}
+.tk-avatile .t{position:absolute;left:30px;top:50%;transform:translateY(-50%);color:#FFFFFF;font-size:40px}
+.tk-regels{margin:16px 0 0;padding-left:20px;display:grid;gap:4px;font-size:14px}
 
 /* Tabel */
 .tabel{border-collapse:collapse;width:100%;font-size:14px;font-family:var(--font-body)}
@@ -225,7 +228,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 footer{border-top:1px solid var(--line);padding:40px 0 56px}
 footer .wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
 footer p{margin:0;font-size:14px;color:var(--ink)}
-.tool .wrap>*,.gen>*,.contrast>*,.hero .wrap>*{min-width:0}
+.tool .wrap>*,.gen>*,.tk-grid>*,.hero .wrap>*{min-width:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
@@ -242,7 +245,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
         <li><a href="#logo">Logo</a></li>
         <li><a href="#avatile">Avatile</a></li>
         <li><a href="#typografie">Typografie</a></li>
-        <li><a href="#contrast">Contrast</a></li>
+        <li><a href="#tekstkleur">Tekstkleur</a></li>
         <li><a href="#tabel">Tabellen</a></li>
       </ul>
     </nav>
@@ -254,7 +257,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div>
         <h1 class="expressief">Huisstijl<br>toolkit</h1>
-        <p>Alles wat je nodig hebt om iets te maken in de huisstijl van Avans Hogeschool. Kopieer een kleur, bouw een avatile, check je contrast. Klaar.</p>
+        <p>Alles wat je nodig hebt om iets te maken in de huisstijl van Avans Hogeschool. Kopieer een kleur, bouw een avatile, kies de juiste tekstkleur. Klaar.</p>
       </div>
       <svg class="hero-art" viewBox="-20 -20 570 460" role="img" aria-label="Drie avatiles in Avans Rood, Kalm Paars en Actief Blauw">
         <polygon points="171.6,0 531.6,0 450,420 90,420" style="fill:#C6002A;stroke:#C6002A;stroke-width:34px;stroke-linejoin:round"/>
@@ -401,31 +404,18 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     </div>
   </section>
 
-  <section class="tool" id="contrast" aria-labelledby="h-contrast">
+  <section class="tool" id="tekstkleur" aria-labelledby="h-tekstkleur">
     <div class="wrap">
       <div class="intro">
-        <h2 class="tactisch" id="h-contrast">Contrast checken</h2>
-        <p>Kies een achtergrond en een tekstkleur. Je ziet direct of de combinatie leesbaar genoeg is op een scherm, volgens de WCAG-norm AA.</p>
-        <p class="regel">Grote tekst is vanaf 24 px, of vanaf 18,66 px vet. Een combinatie die niet slaagt, gebruik je alleen voor vlakken zonder tekst.</p>
+        <h2 class="tactisch" id="h-tekstkleur">Tekstkleur kiezen</h2>
+        <p>Kies een achtergrond. Je ziet welke tekstkleur de merkgids voorschrijft, voor titels en voor bodytekst.</p>
+        <p class="regel">Typografie zet je alleen in zwart, wit of Avans Rood.</p>
+        <p class="regel">Check het contrast volgens WCAG: AA voor normale tekst, AAA voor grote tekst. Combinaties die niet veilig zijn, gebruik je alleen voor visuele elementen, niet voor tekst.</p>
       </div>
-      <div class="paneel contrast">
-        <div>
-          <fieldset class="veld"><legend>Achtergrond</legend><div class="chips" id="c-bg"></div></fieldset>
-          <fieldset class="veld"><legend>Tekstkleur</legend><div class="chips" id="c-fg"></div></fieldset>
-          <button class="knop sec wissel" id="wissel" type="button">Wissel om</button>
-        </div>
-        <div>
-          <div class="proef" id="proef">
-            <span class="groot">Grote tekst, 40 px</span>
-            <p class="klein">Normale tekst in Hanken Grotesk, 16 px. Zo leest een gewone alinea op deze achtergrond.</p>
-          </div>
-          <div class="cijfer" id="cijfer" aria-live="polite"></div>
-          <div class="oordelen">
-            <div class="oordeel"><span>AA normale tekst (4,5:1)</span><b class="label" id="aa-n"></b></div>
-            <div class="oordeel"><span>AA grote tekst (3:1)</span><b class="label" id="aa-g"></b></div>
-          </div>
-          <ul class="tips" id="tips"></ul>
-        </div>
+      <div class="paneel">
+        <fieldset class="veld"><legend>Achtergrond</legend><div class="chips" id="tk-bg"></div></fieldset>
+        <div id="tk-uitkomst"></div>
+        <p class="sr" id="tk-samenvatting" aria-live="polite"></p>
       </div>
     </div>
   </section>
@@ -434,7 +424,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div class="intro">
         <h2 class="tactisch" id="h-tabel">Tabellen</h2>
-        <p>Koprij in volle kleur met witte kapitalen. Rijen in de 20%-tint van dezelfde kleur. Eén kleur per tabel.</p>
+        <p>Koprij in volle kleur met witte kapitalen, op Kalm Paars zwarte kapitalen. Rijen in de 20%-tint van dezelfde kleur. Eén kleur per tabel.</p>
         <p class="regel">Drukwerk: 10 pt, regelafstand 22 pt. Op scherm gebruikt deze pagina 14 px met 32 px rijhoogte.</p>
       </div>
       <div>
@@ -493,12 +483,8 @@ const KLEUREN=[
  {id:'actief-blauw',naam:'Actief Blauw',hex:'#0099FF',rgb:'0 / 153 / 255',cmyk:'85 / 15 / 0 / 0',pms:'PMS 2192',tint:'#CCEBFF'},
  {id:'slim-donkerblauw',naam:'Slim Donkerblauw',hex:'#001A6A',rgb:'0 / 26 / 106',cmyk:'100 / 95 / 0 / 35',pms:'PMS Reflex Blue',tint:'#CCD1E1'}
 ];
-const EXTRA=[{id:'wit',naam:'Wit',hex:'#FFFFFF'},{id:'zwart',naam:'Zwart',hex:'#000000'}];
 const live=document.getElementById('live');
 
-function lum(hex){const n=hex.replace('#','');return [0,2,4].map(i=>parseInt(n.substr(i,2),16)/255).map(c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4)).reduce((s,c,i)=>s+c*[0.2126,0.7152,0.0722][i],0);}
-function ratio(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);}
-function fmt(r){return (Math.floor(r*100)/100).toFixed(2).replace('.',',');}
 
 async function kopieer(tekst){
   try{await navigator.clipboard.writeText(tekst);return true;}catch(e){
@@ -558,7 +544,6 @@ function chips(container,naam,lijst,gekozen,onChange){
     container.appendChild(l);
   });
 }
-const vind=id=>KLEUREN.concat(EXTRA).find(k=>k.id===id);
 FORMATEN.forEach(f=>{
   const l=document.createElement('label');l.className='chip';
   l.innerHTML=`<input type="radio" name="formaat" value="${f.id}" ${f===formaat?'checked':''}><span>${f.naam}</span>`;
@@ -600,48 +585,76 @@ document.getElementById('kopieer-svg').addEventListener('click',async()=>{
 });
 tekenAvatile();
 
-/* 4. Contrast */
-const c={bg:vind('avans-rood'),fg:vind('wit')};
-const TOEGESTAAN=new Set([['avans-rood','helder-rood'],['sociaal-oranje','helder-rood'],['helder-rood','kalm-paars'],['actief-blauw','kalm-paars'],['avans-rood','kalm-paars'],['sociaal-oranje','kalm-paars'],['helder-rood','actief-blauw'],['actief-blauw','slim-donkerblauw'],['avans-rood','sociaal-oranje'],['avans-rood','actief-blauw'],['helder-rood','slim-donkerblauw'],['slim-donkerblauw','kalm-paars']].map(p=>p.sort().join('+')));
-const ALLE=KLEUREN.concat(EXTRA);
-const bgC=document.getElementById('c-bg'),fgC=document.getElementById('c-fg');
-chips(bgC,'cbg',ALLE,c.bg.id,k=>{c.bg=k;checkContrast();});
-chips(fgC,'cfg',ALLE,c.fg.id,k=>{c.fg=k;checkContrast();});
-function zetLabel(el,ok){el.className='label '+(ok?'ok':'nee');el.textContent=ok?'✓ Haalt AA':'✗ Haalt AA niet';}
-function checkContrast(){
-  const r=ratio(c.bg.hex,c.fg.hex);
-  const p=document.getElementById('proef');p.style.background=c.bg.hex;p.style.color=c.fg.hex;
-  document.getElementById('cijfer').textContent=fmt(r)+':1';
-  zetLabel(document.getElementById('aa-n'),r>=4.5);zetLabel(document.getElementById('aa-g'),r>=3);
-  const tips=[];
-  if(c.bg.id===c.fg.id)tips.push('Kies twee verschillende kleuren.');
-  if(!['wit','zwart','avans-rood'].includes(c.fg.id))tips.push('Merkgids: titels zet je alleen in zwart, wit of rood.');
-  if(c.bg.id==='kalm-paars'&&c.fg.id!=='zwart')tips.push('Merkgids: op Kalm Paars gebruik je voor bodytekst alleen zwart.');
-  if(c.bg.id==='wit'&&c.fg.id==='avans-rood')tips.push('Merkgids: op wit is Avans Rood de standaardkleur voor tekst.');
-  const paletIds=KLEUREN.map(k=>k.id);
-  if(c.bg.id!==c.fg.id&&paletIds.includes(c.bg.id)&&paletIds.includes(c.fg.id)){
-    const paar=[c.bg.id,c.fg.id].sort().join('+');
-    if(!TOEGESTAAN.has(paar))tips.push('Merkgids: '+c.bg.naam+' en '+c.fg.naam+' staan niet in de lijst met 12 toegestane kleurcombinaties.');
-  }
-  if(r>=3&&r<4.5)tips.push('Alleen geschikt voor grote tekst, zoals titels.');
-  document.getElementById('tips').innerHTML=tips.map(t=>`<li>${t}</li>`).join('');
+/* 4. Tekstkleur kiezen
+   Combinaties overgenomen uit de merkgids: kleurgebruik-titels-combinaties.png,
+   headline-typografie-en-kleur-voorbeelden.png en kleurgebruik-bodytekst-combinaties.png.
+   Tekstkleuren zijn uitsluitend zwart, wit en Avans Rood.
+   Lichtgrijs en lichtlila hebben in de merkgids geen HEX-code: lichtgrijs is gemeten in de beelden,
+   lichtlila is de 20%-tint van Kalm Paars (merkgids: 'Kalm Paars + lichtlila tint'). */
+const TEKSTKLEUR={'zwart':{naam:'zwart',hex:'#000000'},'wit':{naam:'wit',hex:'#FFFFFF'},'avans-rood':{naam:'Avans Rood',hex:'#C6002A'}};
+const kl=id=>KLEUREN.find(k=>k.id===id);
+const ACHTERGROND=[
+  {id:'wit',naam:'Wit',hex:'#FFFFFF',titel:['avans-rood'],body:['avans-rood']},
+  {id:'lichtgrijs',naam:'Lichtgrijs',hex:'#F5F5F5',titel:['avans-rood','zwart'],body:['zwart']},
+  {id:'avans-rood',naam:'Avans Rood',hex:kl('avans-rood').hex,titel:['wit'],body:['wit']},
+  {id:'helder-rood',naam:'Helder Rood',hex:kl('helder-rood').hex,titel:['wit'],body:['wit']},
+  {id:'sociaal-oranje',naam:'Sociaal Oranje',hex:kl('sociaal-oranje').hex,titel:['wit'],body:['wit']},
+  {id:'kalm-paars',naam:'Kalm Paars',hex:kl('kalm-paars').hex,titel:['avans-rood','zwart'],body:['zwart']},
+  {id:'kalm-paars-20',naam:'Kalm Paars 20%',hex:kl('kalm-paars').tint,titel:['zwart'],body:['zwart']},
+  {id:'actief-blauw',naam:'Actief Blauw',hex:kl('actief-blauw').hex,titel:['wit'],body:['wit']},
+  {id:'slim-donkerblauw',naam:'Slim Donkerblauw',hex:kl('slim-donkerblauw').hex,titel:['wit'],body:['wit']},
+  {id:'beeld',naam:'Beeld (foto)',hex:'radial-gradient(circle at 70% 30%,#3B4A5C,#0B0F14)',beeld:true}
+];
+const TITEL='Leren door te doen';
+const BODY='Onderzoek van Avans Hogeschool staat midden in de praktijk. Je werkt samen met het werkveld.';
+const naamLijst=ids=>ids.map(id=>TEKSTKLEUR[id].naam).join(' of ');
+/* Contrastwaarden uit de merkgids (contrast-controle-wcag.png). Geen eigen berekening. */
+const MG_CONTRAST={'avans-rood+wit':'6,11 (AA)','slim-donkerblauw+wit':'15,68 (AAA)','wit+zwart':'19,02 (AAA)','lichtgrijs+zwart':'16,83 (AAA)','kalm-paars+zwart':'11,66 (AAA)'};
+function contrastInfo(bg,id){
+  const w=MG_CONTRAST[[bg.id,id].sort().join('+')];
+  return w?`In de merkgids aangemerkt als WCAG-veilig: ${w}.`
+          :'De merkgids geeft voor deze combinatie geen contrastwaarde. Check het contrast zelf.';
 }
-document.getElementById('wissel').addEventListener('click',()=>{
-  [c.bg,c.fg]=[c.fg,c.bg];
-  bgC.querySelector(`input[value="${c.bg.id}"]`).checked=true;fgC.querySelector(`input[value="${c.fg.id}"]`).checked=true;
-  checkContrast();
-});
-checkContrast();
+function optie(bg,id,soort){
+  const tk=TEKSTKLEUR[id];
+  const tekst=soort==='titel'?`<p class="t" style="color:${tk.hex}">${TITEL}</p>`:`<p class="b" style="color:${tk.hex}">${BODY}</p>`;
+  return `<div class="tk-optie"><div class="tk-vlak" style="background:${bg.hex}">${tekst}</div>
+    <p class="tk-info"><b>${soort==='titel'?'Titel':'Bodytekst'} in ${tk.naam}.</b> ${contrastInfo(bg,id)}</p></div>`;
+}
+function tekenTekstkleur(bg){
+  const uit=document.getElementById('tk-uitkomst'),sam=document.getElementById('tk-samenvatting');
+  if(bg.beeld){
+    uit.innerHTML=`<div class="tk-grid">
+      <div class="tk-tegel"><h3>Tekst over beeld</h3>
+        <div class="tk-vlak tk-beeld-donker" role="img" aria-label="Voorbeeld: witte titel over een donker, rustig beeld"><span class="tk-beeld-label" aria-hidden="true">Donker beeld</span><p class="t" style="color:#FFFFFF" aria-hidden="true">${TITEL}</p></div>
+        <p class="tk-info"><b>Alleen wit, in Sofia Sans Extra Condensed Extra Bold Italic.</b> Zorg voor voldoende contrast met het beeld.</p></div>
+      <div class="tk-tegel"><h3>Te licht of te druk beeld</h3>
+        <div class="tk-vlak tk-beeld-licht" role="img" aria-label="Voorbeeld: witte titel op een Helder Rode avatile over een licht beeld"><span class="tk-beeld-label" aria-hidden="true">Licht beeld</span>
+          <div class="tk-avatile" aria-hidden="true"><svg viewBox="-12 -12 289.3 154" width="260"><polygon points="25.3,0 265.3,0 240,130 0,130" style="fill:#FF0013;stroke:#FF0013;stroke-width:18.5px;stroke-linejoin:round"/></svg><p class="t">Leren door<br>te doen</p></div></div>
+        <p class="tk-info"><b>Zet de tekst op een avatile,</b> eventueel subtiel als onderstreping. De tekst blijft wit.</p></div>
+    </div>
+    <ul class="tk-regels"><li>Bodytekst in Hanken Grotesk zet je niet over beeld.</li><li>Tekst over beeld is alleen wit, nooit zwart of rood.</li></ul>`;
+    sam.textContent='Tekst over beeld: alleen wit, in Sofia Sans Extra Condensed Extra Bold Italic. Is het beeld te licht of te druk, zet de tekst dan op een avatile.';
+    return;
+  }
+  uit.innerHTML=`<div class="tk-grid">
+    <div class="tk-tegel"><h3>Titel</h3>${bg.titel.map(id=>optie(bg,id,'titel')).join('')}</div>
+    <div class="tk-tegel"><h3>Bodytekst</h3>${bg.body.map(id=>optie(bg,id,'body')).join('')}</div>
+  </div>`;
+  sam.textContent=`Op ${bg.naam}: titel in ${naamLijst(bg.titel)}, bodytekst in ${naamLijst(bg.body)}.`;
+}
+chips(document.getElementById('tk-bg'),'tkbg',ACHTERGROND,'avans-rood',tekenTekstkleur);
+tekenTekstkleur(ACHTERGROND[2]);
 
 /* 5. Tabel */
 const tabel=document.getElementById('tabel-el');
 function zetTabel(k){
-  const kop=k.id==='kalm-paars'?'#000000':'#FFFFFF';
-  tabel.style.setProperty('--t-vol',k.hex);tabel.style.setProperty('--t-tint',k.tint);tabel.style.setProperty('--t-kop',kop);
-  const r=ratio(k.hex,kop);const noot=document.getElementById('tabel-noot');
-  if(k.id==='kalm-paars')noot.textContent='Op Kalm Paars haalt witte tekst geen leesbaar contrast (1,62:1). Daarom is de koptekst hier zwart.';
-  else if(r<4.5)noot.textContent=`Let op: witte koptekst op ${k.naam} haalt op scherm geen 4,5:1 (${fmt(r)}:1). Kies voor schermtabellen liever Avans Rood of Slim Donkerblauw.`;
-  else noot.textContent='';
+  /* Koprij in volkleur met kapitalen. Tekst wit; op Kalm Paars zwart, gelijk aan de kleurkaart in het palet. */
+  const kop=k.id==='kalm-paars'?'zwart':'wit';
+  tabel.style.setProperty('--t-vol',k.hex);tabel.style.setProperty('--t-tint',k.tint);tabel.style.setProperty('--t-kop',TEKSTKLEUR[kop].hex);
+  const w=MG_CONTRAST[[k.id,kop].sort().join('+')];
+  document.getElementById('tabel-noot').textContent=w?`${kop==='wit'?'Wit':'Zwart'} op ${k.naam}: in de merkgids aangemerkt als WCAG-veilig, ${w}.`
+    :`De merkgids geeft voor ${kop} op ${k.naam} geen contrastwaarde. Check het contrast zelf.`;
 }
 let tabelKleur=KLEUREN[0];
 chips(document.getElementById('t-kleur'),'tkleur',KLEUREN,'avans-rood',k=>{tabelKleur=k;zetTabel(k);});
