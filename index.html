@@ -280,7 +280,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div>
         <h1 class="expressief">Huisstijl<br>toolkit</h1>
-        <p>Praktische hulpmiddelen om in de huisstijl van Avans Hogeschool te werken. Kopieer een kleur, bouw een avatile, kies de juiste tekstkleur. Klaar.</p>
+        <p>Praktische hulpmiddelen om in de huisstijl van Avans Hogeschool te werken. Kopieer een kleur, bouw een avatile, kies de juiste tekstkleur. De merkgids blijft leidend: bekijk als Avans-medewerker de volledige <a href="https://avans.sharepoint.com/sites/Communiceren-over-en-met-Avans/SitePages/Huisstijl.aspx" target="_blank" rel="noopener">merkgids</a>.</p>
       </div>
       <svg class="hero-art" viewBox="-20 -20 570 460" role="img" aria-label="Drie avatiles in Avans Rood, Kalm Paars en Actief Blauw">
         <polygon points="171.6,0 531.6,0 450,420 90,420" style="fill:#C6002A;stroke:#C6002A;stroke-width:34px;stroke-linejoin:round"/>
@@ -518,9 +518,10 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
         </div>
         <div class="knoppen">
           <button class="knop" id="kopieer-tabel" type="button">Kopieer tabel</button>
+          <button class="knop sec" id="kopieer-tabel-ppt" type="button">Kopieer voor PowerPoint</button>
           <span class="status" id="tabel-status" role="status"></span>
         </div>
-        <p class="ty-noot"><b>Plak in Word en PowerPoint met Opmaak van bron behouden.</b> Klik na het plakken op het plakpictogram en kies Opmaak van bron behouden (of druk op Ctrl en daarna O). Anders neemt het programma de opmaak van je document over.</p>
+        <p class="ty-noot"><b>Voor Word en Excel: Kopieer tabel. Voor PowerPoint: Kopieer voor PowerPoint</b> (Arial, zoals de merkgids voorschrijft). Plak in Word en PowerPoint met Opmaak van bron behouden. Klik na het plakken op het plakpictogram en kies Opmaak van bron behouden (of druk op Ctrl en daarna O). Anders neemt het programma de opmaak van je document over.</p>
         <p class="tabel-noot" id="tabel-noot" role="status"></p>
       </div>
     </div>
@@ -530,7 +531,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
 <footer>
   <div class="wrap">
     <svg width="46" height="40" viewBox="-6 -6 58 52" aria-hidden="true"><polygon points="7.8,0 37.8,0 30,40 0,40" style="fill:#C6002A;stroke:#C6002A;stroke-width:6px;stroke-linejoin:round"/></svg>
-    <p>Gebouwd op de merkgids en schrijfwijzer van Avans Hogeschool. Fonts: Hanken Grotesk en Sofia Sans Extra Condensed (OFL-1.1), ingebed in deze pagina.</p>
+    <p>De merkgids blijft leidend. Deze toolkit helpt je de belangrijkste richtlijnen snel toe te passen. Avans-medewerkers kunnen de volledige <a href="https://avans.sharepoint.com/sites/Communiceren-over-en-met-Avans/SitePages/Huisstijl.aspx" target="_blank" rel="noopener">Merkgids</a> bekijken.<br>Gebouwd op de merkgids en schrijfwijzer van Avans Hogeschool. Fonts: Hanken Grotesk en Sofia Sans Extra Condensed (OFL-1.1), ingebed in deze pagina.</p>
   </div>
 </footer>
 
@@ -874,13 +875,11 @@ tekenAvatile();
 /* 4. Tekstkleur kiezen
    Combinaties overgenomen uit de merkgids: kleurgebruik-titels-combinaties.png,
    headline-typografie-en-kleur-voorbeelden.png en kleurgebruik-bodytekst-combinaties.png.
-   Tekstkleuren zijn uitsluitend zwart, wit en Avans Rood.
-   Lichtgrijs heeft in de merkgids geen HEX-code: de waarde is gemeten in de merkgidsbeelden. */
+   Tekstkleuren zijn uitsluitend zwart, wit en Avans Rood. */
 const TEKSTKLEUR={'zwart':{naam:'zwart',hex:'#000000'},'wit':{naam:'wit',hex:'#FFFFFF'},'avans-rood':{naam:'Avans Rood',hex:'#C6002A'}};
 const kl=id=>KLEUREN.find(k=>k.id===id);
 const ACHTERGROND=[
   {id:'wit',naam:'Wit',hex:'#FFFFFF',titel:['avans-rood'],body:['avans-rood']},
-  {id:'lichtgrijs',naam:'Lichtgrijs',hex:'#F5F5F5',titel:['avans-rood','zwart'],body:['zwart']},
   {id:'avans-rood',naam:'Avans Rood',hex:kl('avans-rood').hex,titel:['wit'],body:['wit']},
   {id:'helder-rood',naam:'Helder Rood',hex:kl('helder-rood').hex,titel:['wit'],body:['wit']},
   {id:'sociaal-oranje',naam:'Sociaal Oranje',hex:kl('sociaal-oranje').hex,titel:['wit'],body:['wit']},
@@ -893,7 +892,7 @@ const TITEL='Leren door te doen';
 const BODY='Onderzoek van Avans Hogeschool staat midden in de praktijk. Je werkt samen met het werkveld.';
 const naamLijst=ids=>ids.map(id=>TEKSTKLEUR[id].naam).join(' of ');
 /* Contrastwaarden uit de merkgids (contrast-controle-wcag.png). Geen eigen berekening. */
-const MG_CONTRAST={'avans-rood+wit':'6,11 (AA)','slim-donkerblauw+wit':'15,68 (AAA)','wit+zwart':'19,02 (AAA)','lichtgrijs+zwart':'16,83 (AAA)','kalm-paars+zwart':'11,66 (AAA)'};
+const MG_CONTRAST={'avans-rood+wit':'6,11 (AA)','slim-donkerblauw+wit':'15,68 (AAA)','wit+zwart':'19,02 (AAA)','kalm-paars+zwart':'11,66 (AAA)'};
 function contrastInfo(bg,id){
   const w=MG_CONTRAST[[bg.id,id].sort().join('+')];
   return w?`In de merkgids aangemerkt als WCAG-veilig: ${w}.`
@@ -1007,11 +1006,11 @@ tekenTabel();
 
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const vlak=s=>s.replace(/[\t\r\n]+/g,' ').trim();
-function tabelInhoud(){
+function tabelInhoud(ppt){
   const kop=tabelKleur.id==='kalm-paars'?'#000000':'#FFFFFF';
   const kopTekst=tb.kop.slice(0,tb.k).map(s=>vlak(s).toLocaleUpperCase('nl-NL'));
   const rijen=tb.cel.slice(0,tb.r).map(rij=>rij.slice(0,tb.k).map(vlak));
-  const basis="font-family:'Hanken Grotesk',Arial,sans-serif;font-size:10pt;line-height:22pt;padding:0 8pt;text-align:left;vertical-align:middle;";
+  const basis=`font-family:${ppt?'Arial,Helvetica':"'Hanken Grotesk',Arial"},sans-serif;font-size:10pt;line-height:22pt;padding:0 8pt;text-align:left;vertical-align:middle;`;
   const html='<meta charset="utf-8"><table cellpadding="6" cellspacing="0" style="border-collapse:collapse;">'+
     '<thead><tr>'+kopTekst.map(s=>`<th bgcolor="${tabelKleur.hex}" style="${basis}background:${tabelKleur.hex};color:${kop};font-weight:bold;text-transform:uppercase;">${esc(s)}</th>`).join('')+'</tr></thead>'+
     '<tbody>'+rijen.map(rij=>'<tr>'+rij.map(s=>`<td bgcolor="${tabelKleur.tint}" style="${basis}background:${tabelKleur.tint};color:#000000;border-top:2px solid #FFFFFF;">${esc(s)}</td>`).join('')+'</tr>').join('')+'</tbody></table>';
@@ -1027,9 +1026,9 @@ function kopieerViaEvent(html,tekst){
   document.removeEventListener('copy',h,true);ta.remove();
   return ok&&gezet;
 }
-document.getElementById('kopieer-tabel').addEventListener('click',async()=>{
-  const btn=document.getElementById('kopieer-tabel'),s=document.getElementById('tabel-status');
-  const {html,tekst}=tabelInhoud();
+const kopieerTabel=ppt=>async()=>{
+  const btn=document.getElementById(ppt?'kopieer-tabel-ppt':'kopieer-tabel'),s=document.getElementById('tabel-status');
+  const {html,tekst}=tabelInhoud(ppt);
   let uitkomst='fout';
   if(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem){
     try{
@@ -1039,11 +1038,13 @@ document.getElementById('kopieer-tabel').addEventListener('click',async()=>{
   }
   if(uitkomst==='fout'&&kopieerViaEvent(html,tekst))uitkomst='beide';
   if(uitkomst==='fout'&&await kopieer(tekst))uitkomst='tekst';
-  s.textContent=uitkomst==='beide'?'Tabel gekopieerd. Plak in Word en PowerPoint met Opmaak van bron behouden.':
+  s.textContent=uitkomst==='beide'?(ppt?'Tabel gekopieerd voor PowerPoint (Arial). Plak met Opmaak van bron behouden.':'Tabel gekopieerd. Plak in Word met Opmaak van bron behouden.'):
     uitkomst==='tekst'?'Tabel gekopieerd als tekst, zonder opmaak. Excel herkent rijen en kolommen wel.':
     'Kopiëren lukte niet in deze browser. Probeer een andere browser.';
   btn.focus();clearTimeout(s._t);s._t=setTimeout(()=>{s.textContent='';},6000);
-});
+};
+document.getElementById('kopieer-tabel').addEventListener('click',kopieerTabel(false));
+document.getElementById('kopieer-tabel-ppt').addEventListener('click',kopieerTabel(true));
 
 /* Logo: downloaden en kopiëren */
 const LOGO={rood:document.getElementById('bron-logo-rood').textContent.trim(),wit:document.getElementById('bron-logo-wit').textContent.trim()};
@@ -1381,6 +1382,13 @@ document.querySelectorAll('.actie[data-comp]').forEach(btn=>{
   });
 });
 
+/* Rechthoekige kaders: radius = (lengte + breedte) / 2 × 0,04 (vuistregel merkgids). */
+const KADERS='.paneel,.kleur,.voorbeeld,.code pre,.glyph,.tk-vlak,.ty-preview,.logo-vak';
+const kaderRo=new ResizeObserver(items=>items.forEach(it=>{const r=it.target.getBoundingClientRect();it.target.style.borderRadius=Math.round((r.width+r.height)/2*0.04)+'px';}));
+const volgKaders=root=>root.querySelectorAll&&root.querySelectorAll(KADERS).forEach(el=>{if(!el._kader){el._kader=1;kaderRo.observe(el);}});
+volgKaders(document);
+new MutationObserver(()=>volgKaders(document)).observe(document.body,{childList:true,subtree:true});
+
 /* ===== Typografietester =====
    Regels uit de merkgids (Titels — drie niveaus, Richtlijnen aantal woorden en puntgrootte, Body tekst,
    PowerPoint-uitzondering). Waar de merkgids geen getal geeft, staat dat bij de regel. */
@@ -1388,7 +1396,7 @@ const TY={
   exp:{naam:'Expressieve titel',font:'Sofia Sans Extra Condensed',gewicht:800,cursief:true,kapitalen:true,
        lh:[80,90],lhStd:85,woorden:{digi:8,print:10},min:{digi:100,print:30},std:{digi:100,print:30},bereik:{digi:[40,300],print:[12,200]},
        ppt:{font:'Arial Narrow',vet:true,cursief:true},
-       tekst:'Wij maken het onderwijs van morgen'},
+       tekst:'Samen bouwen aan morgen'},
   tac:{naam:'Tactische titel',font:'Sofia Sans Extra Condensed',gewicht:800,cursief:false,kapitalen:false,
        lh:null,lhStd:100,woorden:{digi:20,print:20},min:{digi:50,print:12},std:{digi:50,print:16},bereik:{digi:[20,200],print:[8,120]},
        ppt:{font:'Arial Narrow',vet:true,cursief:true},
@@ -1433,8 +1441,9 @@ function checks(soort){
   const w=telWoorden(ty.teksten[soort]);
   if(w===0)out.push(['nee','Typ een tekst.']);
   if(d.woorden){const max=d.woorden[c];out.push(w<=max?['ok',`${w} woorden. Richtlijn ${cn}: 1 tot ${max}.`]:['nee',`${w} woorden. Te lang: richtlijn ${cn} is 1 tot ${max} woorden.${soort==='exp'?' Gebruik voor langere titels een tactische titel.':''}`]);}
-  else if(soort==='body')out.push(['info',`${w} woorden. Ideale regellengte: rond de 12 woorden per regel.`]);
-  else out.push(['info',`${w} woorden. Een inleiding is kleiner dan de titel en groter dan de lopende tekst.`]);
+  if(soort==='exp'&&w>5&&w<=d.woorden[c])out.push(['info','Meer dan 5 woorden. De merkgids zegt: gebruik voor titels langer dan 5 woorden bij voorkeur een tactische titel.']);
+  if(!d.woorden&&soort==='body')out.push(['info',`${w} woorden. Ideale regellengte: rond de 12 woorden per regel.`]);
+  if(!d.woorden&&soort==='inl')out.push(['info',`${w} woorden. Een inleiding is kleiner dan de titel en groter dan de lopende tekst.`]);
   if(d.min){const mn=d.min[c];out.push(m>=mn?['ok',`Grootte ${m} ${u}. Minimaal ${mn} ${u} (${cn}).`]:['nee',`Grootte ${m} ${u} is te klein. Minimaal ${mn} ${u} (${cn}).`]);}
   else out.push(['info',`Grootte ${m} ${u}. De merkgids legt geen minimum vast. Voorbeeld uit de merkgids: ${soort==='inl'?'30 pt met 36 pt regelafstand':'20 pt met 28 pt regelafstand'}.`]);
   if(d.lh)out.push(lh>=d.lh[0]&&lh<=d.lh[1]?['ok',`Regelafstand ${lh}%. Richtlijn: ${d.lh[0]} tot ${d.lh[1]}%.`]:['nee',`Regelafstand ${lh}% valt buiten de richtlijn van ${d.lh[0]} tot ${d.lh[1]}%.`]);
@@ -1464,7 +1473,7 @@ function tekenTy(){
   document.getElementById('ty-checks').innerHTML=c.map(([k,tx])=>`<li class="ty-${k}"><span class="i" aria-hidden="true">${k==='ok'?'✓':k==='nee'?'✗':'i'}</span><span><span class="sr">${k==='ok'?'In orde: ':k==='nee'?'Buiten de richtlijn: ':'Info: '}</span>${tx}</span></li>`).join('');
   const n=c.filter(x=>x[0]==='nee').length,sam=document.getElementById('ty-samenvatting'),z=n?`${n} ${n===1?'punt':'punten'} buiten de richtlijn`:'Alles binnen de richtlijn';
   if(sam.textContent!==z)sam.textContent=z;
-  const plaktip='<b>Plak in Word en PowerPoint met Opmaak van bron behouden.</b> Klik na het plakken op het plakpictogram en kies Opmaak van bron behouden (of druk op Ctrl en daarna O). Anders neemt het programma het lettertype van je document over. ';
+  const plaktip='<b>Voor Word: Kopieer met opmaak. Voor PowerPoint: Kopieer voor PowerPoint</b> (Arial Narrow en Arial, zoals de merkgids voorschrijft). Plak altijd met Opmaak van bron behouden: klik na het plakken op het plakpictogram, of druk op Ctrl en daarna O. Anders neemt het programma het lettertype van je document over. ';
   document.getElementById('ty-noot').innerHTML=plaktip+(ty.weergave==='ppt'
     ?(arialNarrow?'':'Arial Narrow staat niet op deze computer, dus dit voorbeeld toont een vervanging. In PowerPoint (met Office) is Arial Narrow er wel.')
     :'Het lettertype komt alleen goed over als het geïnstalleerd is. Installeer de fonts via Fonts downloaden hieronder.');
@@ -1499,7 +1508,7 @@ async function kopieerRijk(html,tekst){
 function tyMeld(id,tx){const s=document.getElementById(id);s.textContent=tx;clearTimeout(s._t);s._t=setTimeout(()=>{s.textContent='';},6000);}
 document.getElementById('ty-kopieer').addEventListener('click',async()=>{
   const {html,tekst}=tyHtml('avans'),r=await kopieerRijk(html,tekst);
-  tyMeld('ty-status',r==='beide'?TY[ty.soort].naam+' gekopieerd. Plak met Opmaak van bron behouden.':r==='tekst'?'Gekopieerd als platte tekst, zonder opmaak':'Kopiëren lukte niet in deze browser');
+  tyMeld('ty-status',r==='beide'?TY[ty.soort].naam+' gekopieerd voor Word. Plak met Opmaak van bron behouden.':r==='tekst'?'Gekopieerd als platte tekst, zonder opmaak':'Kopiëren lukte niet in deze browser');
 });
 document.getElementById('ty-ppt').addEventListener('click',async()=>{
   const {html,tekst}=tyHtml('ppt'),r=await kopieerRijk(html,tekst);
