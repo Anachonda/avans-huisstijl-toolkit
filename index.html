@@ -117,12 +117,8 @@ section.tool{padding:72px 0;border-top:1px solid var(--line)}
 .info span+span{margin-top:6px}
 .info b{display:block;font-weight:600;font-size:12px}
 .kleur.hoofd .info span+span{margin-top:0}
-.kleur .tint{padding:12px 18px;font-size:14px;color:#000}
-.tint b{font-weight:600}
 .kopieer-label{position:absolute;top:14px;right:14px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#000;opacity:0;transform:translateY(-4px);transition:opacity .15s,transform .15s;pointer-events:none}
-.tint .kopieer-label{top:0;right:0;bottom:0;left:0;border-radius:0;display:flex;align-items:center;padding:0 10px;font-size:12px;white-space:nowrap;overflow:hidden;transform:none}
 button.gekopieerd .kopieer-label{opacity:1;transform:none}
-.tint.gekopieerd .kopieer-label{transform:none}
 .formaat{margin-bottom:16px}
 .formaat .chip span{padding:6px 14px}
 @media (max-width:900px){.palet{grid-template-columns:repeat(2,1fr)}.kleur.hoofd .vol .naam{font-size:44px}.kleur.hoofd .info{grid-template-columns:repeat(2,auto);row-gap:6px}}
@@ -188,13 +184,24 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .comp .voorbeeld svg{max-width:100%}
 
 /* Typografie */
-.specimen{display:grid;gap:40px}
-.spec .onder{font-size:14px;color:var(--ink);margin:14px 0 0;padding-top:10px;border-top:1px solid var(--line)}
-.spec-exp{font-size:clamp(64px,10vw,120px);color:var(--title)}
-.spec-tac{font-size:clamp(40px,5.2vw,56px)}
-.spec-inl{font-size:21px;line-height:1.5;margin:0;max-width:34em}
-.spec-body{font-size:16px;line-height:1.7;margin:0;max-width:40em}
-.spec-body+.spec-body{margin-top:1em}
+.specimen{display:grid;gap:28px}
+.ty-keuzes{display:flex;flex-wrap:wrap;gap:0 28px}
+.specimen>*,.ty-keuzes>*{min-width:0;max-width:100%}
+.ty-tekst{width:100%;min-height:96px;font:inherit;font-size:16px;line-height:1.5;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--ink);resize:vertical}
+.ty-maten{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+@media (max-width:700px){.ty-maten{grid-template-columns:1fr}}
+.ty-preview{background:var(--bg);border-radius:var(--radius);padding:28px;overflow:hidden;overflow-wrap:anywhere}
+.ty-preview p{margin:0;white-space:pre-line}
+.ty-preview p+p{margin-top:.8em}
+.ty-spec{font-size:14px;margin:12px 0 0}
+.ty-checks{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:14px}
+.ty-checks li{display:flex;gap:8px;align-items:baseline;min-width:0;position:relative}
+.ty-checks li>span:last-child{min-width:0;flex:1}
+.ty-checks .i{flex:0 0 1.2em;font-weight:700;text-align:center}
+.ty-checks .ty-nee .i{color:var(--avans-rood)}
+.ty-noot{font-size:14px;margin:10px 0 0;max-width:46em}
+.ty-fonts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.ty-fonts p{margin:0;font-size:14px;max-width:40em}
 .glyphs{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 @media (max-width:900px){.glyphs{grid-template-columns:repeat(2,1fr)}}
 .glyph{background:var(--surface);border-radius:var(--radius);padding:18px}
@@ -268,7 +275,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div>
         <h1 class="expressief">Huisstijl<br>toolkit</h1>
-        <p>Alles wat je nodig hebt om iets te maken in de huisstijl van Avans Hogeschool. Kopieer een kleur, bouw een avatile, kies de juiste tekstkleur. Klaar.</p>
+        <p>Praktische hulpmiddelen om in de huisstijl van Avans Hogeschool te werken. Kopieer een kleur, bouw een avatile, kies de juiste tekstkleur. Klaar.</p>
       </div>
       <svg class="hero-art" viewBox="-20 -20 570 460" role="img" aria-label="Drie avatiles in Avans Rood, Kalm Paars en Actief Blauw">
         <polygon points="171.6,0 531.6,0 450,420 90,420" style="fill:#C6002A;stroke:#C6002A;stroke-width:34px;stroke-linejoin:round"/>
@@ -282,7 +289,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div class="intro">
         <h2 class="tactisch" id="h-kleuren">Kleuren</h2>
-        <p>Kies een formaat. Klik daarna op een kleurvlak of een 20%-tint om die kleur in dat formaat te kopiëren. Voor drukwerk staan CMYK en PMS erbij.</p>
+        <p>Kies een formaat. Klik daarna op een kleurvlak om die kleur in dat formaat te kopiëren. Voor drukwerk staan CMYK en PMS erbij.</p>
         <p class="regel">Avans Rood is de hoofdkleur. De andere 5 gebruik je als kleinere accenten.</p>
         <p class="regel">Rood volvlak in drukwerk is altijd Helder Rood, niet Avans Rood.</p>
       </div>
@@ -414,26 +421,31 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
     <div class="wrap">
       <div class="intro">
         <h2 class="tactisch" id="h-typo">Typografie</h2>
-        <p>Twee fonts, elk met een eigen taak. Sofia Sans Extra Condensed voor titels, Hanken Grotesk voor alle lopende tekst en knoppen.</p>
+        <p>Twee fonts, elk met een eigen taak. Sofia Sans Extra Condensed voor titels, Hanken Grotesk voor alle lopende tekst en knoppen. Typ je eigen tekst en zie of die past binnen de richtlijnen.</p>
         <p class="regel">Titels zet je alleen in zwart, wit of rood.</p>
       </div>
       <div class="specimen">
-        <div class="spec">
-          <p class="expressief spec-exp">Wij maken het onderwijs van morgen</p>
-          <p class="onder">Titel expressief. Sofia Sans Extra Condensed Extra Bold Italic, alleen hoofdletters, regelafstand 80 tot 90%. Digitaal: 1 tot 8 woorden. Social media: minimaal 100 px.</p>
-        </div>
-        <div class="spec">
-          <p class="tactisch spec-tac">Zo laat je zien wat jouw onderzoek oplevert voor de praktijk</p>
-          <p class="onder">Titel tactisch. Sofia Sans Extra Condensed Extra Bold, recht, hoofdletters en kleine letters. Digitaal: tot 20 woorden. Social media: minimaal 50 px.</p>
-        </div>
-        <div class="spec">
-          <p class="spec-inl">Onderzoek bij Avans Hogeschool gebeurt niet op afstand. Je werkt samen met docenten, studenten en het werkveld aan vragen die er nu toe doen.</p>
-          <p class="onder">Inleiding. Hanken Grotesk Regular, 21 px, ruime regelafstand.</p>
-        </div>
-        <div class="spec">
-          <p class="spec-body">Lopende tekst is kleiner dan een inleiding en krijgt meer regelafstand. Zo blijft een lange tekst prettig om te lezen. Houd een regel rond de 12 woorden. Schrijf in korte, actieve zinnen en spreek je lezer direct aan.</p>
-          <p class="spec-body">Cijfers schrijf je altijd in getallen, ook onder de 20. Een datum schrijf je voluit, zoals 3 september. Het jaartal laat je weg als het duidelijk is.</p>
-          <p class="onder">Lopende tekst. Hanken Grotesk Regular, 16 px, regelafstand 1,7.</p>
+        <div class="paneel">
+          <div class="ty-keuzes">
+            <fieldset class="veld"><legend>Toepassing</legend><div class="chips plain" id="ty-soort"></div></fieldset>
+            <fieldset class="veld"><legend>Gebruik</legend><div class="chips plain" id="ty-context"></div></fieldset>
+            <fieldset class="veld"><legend>Weergave</legend><div class="chips plain" id="ty-weergave"></div></fieldset>
+          </div>
+          <div class="veld">
+            <label for="ty-tekst">Jouw tekst</label>
+            <textarea class="ty-tekst" id="ty-tekst" rows="3"></textarea>
+          </div>
+          <div class="ty-maten" id="ty-maten"></div>
+          <div class="ty-preview" id="ty-preview" aria-label="Voorbeeld"></div>
+          <p class="ty-spec" id="ty-spec"></p>
+          <ul class="ty-checks" id="ty-checks"></ul>
+          <p class="sr" id="ty-samenvatting" aria-live="polite"></p>
+          <div class="knoppen">
+            <button class="knop" id="ty-kopieer" type="button">Kopieer met opmaak</button>
+            <button class="knop sec" id="ty-ppt" type="button">Kopieer voor PowerPoint</button>
+            <span class="status" id="ty-status" role="status"></span>
+          </div>
+          <p class="ty-noot" id="ty-noot"></p>
         </div>
         <div class="glyphs" aria-label="Gewichten">
           <div class="glyph"><div class="aa" style="font-family:var(--font-titel);font-weight:800;font-style:italic">Aa</div><small>Sofia Extra Bold Italic</small></div>
@@ -441,6 +453,11 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
           <div class="glyph"><div class="aa" style="font-family:var(--font-body);font-weight:400">Aa</div><small>Hanken Grotesk Regular</small></div>
           <div class="glyph"><div class="aa" style="font-family:var(--font-body);font-weight:600">Aa</div><small>Hanken Grotesk SemiBold</small></div>
           <div class="glyph"><div class="aa" style="font-family:var(--font-body);font-weight:700">Aa</div><small>Hanken Grotesk Bold</small></div>
+        </div>
+        <div class="ty-fonts">
+          <button class="knop sec" id="ty-fonts" type="button">Fonts downloaden (zip)</button>
+          <p>Beide fonts zijn open source (SIL Open Font License), ook voor commercieel gebruik. De zip bevat de 5 .ttf-bestanden en de licenties. Installeren doe je zelf: pak de zip uit en dubbelklik op elk .ttf-bestand.</p>
+          <span class="status" id="ty-fonts-status" role="status"></span>
         </div>
       </div>
     </div>
@@ -493,6 +510,7 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
           <button class="knop" id="kopieer-tabel" type="button">Kopieer tabel</button>
           <span class="status" id="tabel-status" role="status"></span>
         </div>
+        <p class="ty-noot"><b>Plak in Word en PowerPoint met Opmaak van bron behouden.</b> Klik na het plakken op het plakpictogram en kies Opmaak van bron behouden (of druk op Ctrl en daarna O). Anders neemt het programma de opmaak van je document over.</p>
         <p class="tabel-noot" id="tabel-noot" role="status"></p>
       </div>
     </div>
@@ -508,6 +526,194 @@ footer p{margin:0;font-size:14px;color:var(--ink)}
 
 <div class="sr" aria-live="polite" id="live"></div>
 
+<script type="text/plain" id="ofl-hanken">Copyright 2021 The Hanken Grotesk Project Authors (https://github.com/marcologous/hanken-grotesk)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+https://openfontlicense.org
+
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded, 
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+</script>
+<script type="text/plain" id="ofl-sofia">Copyright 2019 The Sofia Sans Project Authors (https://github.com/lettersoup/Sofia-Sans)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+https://openfontlicense.org
+
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded, 
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+</script>
 <script type="image/svg+xml" id="bron-logo-rood"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 63" width="210" height="63" role="img" aria-label="Avans Hogeschool-logo">
   <path d="M 0.00,25.59 L 0.57,24.00 L 1.61,22.00 L 4.00,19.46 L 6.00,18.00 L 8.00,16.80 L 11.00,15.57 L 13.00,15.11 L 14.00,14.66 L 18.00,14.00 L 19.00,14.00 L 19.34,15.00 L 18.34,19.00 L 17.00,20.34 L 16.00,20.57 L 15.00,21.34 L 14.00,21.73 L 12.59,23.00 L 11.73,24.00 L 10.73,26.00 L 10.39,28.00 L 10.53,30.00 L 11.00,30.77 L 12.00,31.57 L 13.00,32.11 L 14.00,32.33 L 16.00,32.33 L 18.00,31.89 L 18.72,31.00 L 19.33,29.00 L 19.72,26.00 L 20.33,24.00 L 20.80,21.00 L 22.38,14.00 L 22.89,11.00 L 22.61,10.00 L 22.00,8.80 L 20.00,8.00 L 16.00,8.00 L 12.00,8.80 L 11.00,9.28 L 8.00,10.11 L 7.61,9.00 L 7.50,8.00 L 7.53,5.00 L 7.80,4.00 L 9.00,2.54 L 11.00,1.61 L 13.00,1.27 L 15.00,0.66 L 19.00,0.33 L 23.00,0.33 L 26.00,0.61 L 29.00,1.66 L 31.00,3.20 L 32.43,5.00 L 33.20,7.00 L 33.43,8.00 L 33.50,12.00 L 32.20,19.00 L 31.62,21.00 L 31.34,23.00 L 30.80,25.00 L 30.34,28.00 L 29.73,30.00 L 29.28,33.00 L 28.67,35.00 L 28.53,36.00 L 28.00,36.57 L 27.00,37.11 L 25.00,37.62 L 23.00,38.34 L 18.00,39.00 L 17.00,39.00 L 16.00,39.34 L 12.00,39.34 L 10.00,39.00 L 9.00,39.00 L 8.00,38.67 L 6.00,38.39 L 3.00,37.00 L 2.00,36.34 L 0.80,35.00 L 0.00,33.34 Z M 50.00,38.43 L 48.00,38.67 L 41.00,38.67 L 40.00,38.45 L 39.66,38.00 L 39.33,33.00 L 38.66,29.00 L 38.33,24.00 L 37.66,20.00 L 37.33,15.00 L 36.66,11.00 L 36.33,6.00 L 35.66,2.00 L 36.00,1.33 L 37.00,1.00 L 44.00,1.00 L 46.00,1.66 L 47.34,3.00 L 47.67,6.00 L 47.67,10.00 L 48.00,12.00 L 48.00,16.00 L 48.34,18.00 L 48.34,21.00 L 48.50,22.00 L 49.00,22.66 L 51.80,16.00 L 52.43,15.00 L 52.72,14.00 L 53.33,13.00 L 53.61,12.00 L 55.11,9.00 L 56.80,5.00 L 58.80,2.00 L 60.00,1.33 L 61.00,1.00 L 69.00,1.00 L 69.50,2.00 L 67.80,5.00 L 67.43,6.00 L 66.80,7.00 L 66.43,8.00 L 65.80,9.00 L 65.43,10.00 L 64.80,11.00 L 64.43,12.00 L 63.80,13.00 L 62.39,16.00 L 61.67,17.00 L 61.34,18.00 L 60.67,19.00 L 60.34,20.00 L 59.67,21.00 L 59.34,22.00 L 58.67,23.00 L 58.34,24.00 L 57.67,25.00 L 57.34,26.00 L 56.67,27.00 L 56.34,28.00 L 55.57,29.00 L 55.20,30.00 L 54.57,31.00 L 52.20,36.00 L 51.54,37.00 L 50.00,38.43 Z M 82.00,39.00 L 81.00,39.00 L 79.00,39.34 L 75.00,39.34 L 74.00,39.00 L 73.00,39.00 L 70.00,38.47 L 69.00,38.20 L 67.00,37.34 L 64.46,35.00 L 63.80,34.00 L 63.47,33.00 L 63.00,31.00 L 63.00,29.00 L 63.50,26.00 L 63.72,25.00 L 64.61,23.00 L 66.00,21.11 L 67.00,19.89 L 70.00,17.66 L 72.00,16.57 L 73.00,16.33 L 74.00,15.80 L 78.00,14.61 L 82.00,13.89 L 82.26,14.00 L 82.67,15.00 L 82.28,18.00 L 81.00,20.00 L 78.00,21.54 L 76.00,23.23 L 74.67,25.00 L 74.11,27.00 L 74.00,28.00 L 74.20,30.00 L 74.73,31.00 L 76.00,31.80 L 77.00,32.20 L 78.00,32.33 L 80.00,32.33 L 82.00,31.60 L 82.43,31.00 L 82.66,29.00 L 83.33,27.00 L 83.72,24.00 L 84.33,22.00 L 85.61,15.00 L 86.20,13.00 L 86.50,11.00 L 86.38,10.00 L 85.00,8.50 L 83.00,8.00 L 80.00,8.00 L 76.00,8.73 L 72.00,10.20 L 71.75,10.00 L 71.33,9.00 L 71.00,7.00 L 71.00,6.00 L 71.43,4.00 L 72.20,3.00 L 74.00,1.89 L 78.00,0.80 L 80.00,0.50 L 83.00,0.33 L 87.00,0.33 L 90.00,0.66 L 93.00,2.00 L 94.00,2.61 L 95.00,3.58 L 96.00,5.00 L 96.43,6.00 L 96.89,8.00 L 97.00,12.00 L 96.20,17.00 L 95.80,18.00 L 95.34,21.00 L 94.57,24.00 L 94.34,26.00 L 93.73,28.00 L 93.28,31.00 L 92.67,33.00 L 92.20,36.00 L 90.00,37.28 L 87.00,38.20 L 83.00,38.73 L 82.00,39.00 Z M 126.00,39.00 L 118.00,39.00 L 117.00,38.50 L 116.57,38.00 L 116.50,37.00 L 116.72,35.00 L 117.33,33.00 L 117.72,30.00 L 118.33,28.00 L 118.80,25.00 L 120.33,18.00 L 120.72,15.00 L 121.33,13.00 L 121.47,12.00 L 121.38,10.00 L 121.00,9.50 L 120.00,8.57 L 118.00,8.00 L 117.00,8.00 L 114.00,8.50 L 113.11,9.00 L 113.00,9.21 L 112.67,10.00 L 112.28,13.00 L 111.67,15.00 L 111.20,18.00 L 110.62,20.00 L 110.34,22.00 L 109.20,27.00 L 108.34,29.00 L 107.00,30.42 L 106.00,31.00 L 104.00,31.80 L 103.00,32.39 L 102.00,32.67 L 101.00,33.28 L 100.00,33.57 L 99.00,34.20 L 98.00,34.50 L 97.00,34.01 L 97.27,33.00 L 97.66,30.00 L 98.33,28.00 L 98.72,25.00 L 99.33,23.00 L 99.80,20.00 L 100.33,18.00 L 100.80,15.00 L 101.38,13.00 L 102.89,5.00 L 103.77,3.00 L 104.00,2.80 L 108.00,1.61 L 110.00,1.33 L 112.00,0.72 L 117.00,0.33 L 122.00,0.50 L 124.00,0.80 L 127.00,1.80 L 129.00,3.00 L 130.00,3.80 L 131.00,5.12 L 131.50,6.00 L 132.28,8.00 L 132.34,12.00 L 131.80,14.00 L 131.39,17.00 L 130.67,20.00 L 130.20,23.00 L 129.80,24.00 L 129.34,27.00 L 128.57,30.00 L 128.34,32.00 L 127.73,34.00 L 127.34,37.00 L 127.00,38.01 L 126.00,39.00 Z M 144.00,39.00 L 143.00,39.00 L 142.00,39.34 L 139.00,39.34 L 138.00,39.00 L 137.00,39.00 L 134.00,38.28 L 132.00,37.47 L 129.80,36.00 L 133.00,30.80 L 135.00,30.00 L 136.00,30.00 L 137.00,30.33 L 139.00,30.61 L 142.00,30.47 L 143.00,30.00 L 144.20,29.00 L 145.11,27.00 L 145.27,26.00 L 144.20,24.00 L 141.00,21.73 L 140.00,21.28 L 138.00,19.59 L 136.66,18.00 L 135.66,15.00 L 135.66,12.00 L 136.53,9.00 L 137.50,7.00 L 138.89,5.00 L 140.00,3.89 L 143.00,1.80 L 146.00,0.72 L 149.00,0.33 L 152.00,0.33 L 155.00,0.66 L 156.00,0.89 L 157.00,1.38 L 158.00,1.57 L 160.00,2.61 L 160.46,3.00 L 160.50,4.00 L 159.39,6.00 L 158.00,7.67 L 157.00,8.43 L 156.00,8.62 L 155.00,8.67 L 152.00,8.20 L 151.00,8.20 L 149.00,8.67 L 147.62,10.00 L 147.20,11.00 L 147.00,12.00 L 147.11,13.00 L 147.59,14.00 L 148.59,15.00 L 152.00,17.27 L 153.00,17.72 L 155.00,19.54 L 156.11,21.00 L 156.53,22.00 L 157.00,24.00 L 156.89,27.00 L 156.20,30.00 L 155.57,31.00 L 155.20,32.00 L 154.46,33.00 L 152.59,35.00 L 151.00,36.39 L 149.00,37.50 L 147.00,38.28 L 144.00,39.00 Z M 120.00,57.67 L 119.00,57.67 L 118.20,57.00 L 118.66,54.00 L 119.27,52.00 L 119.53,50.00 L 119.47,49.00 L 119.00,48.53 L 118.00,48.50 L 117.00,48.67 L 116.67,49.00 L 115.67,53.00 L 115.20,56.00 L 114.89,57.00 L 114.00,57.67 L 113.00,57.67 L 112.33,57.00 L 112.72,54.00 L 113.33,52.00 L 113.80,49.00 L 114.89,44.00 L 115.20,43.00 L 116.00,42.00 L 117.01,42.00 L 117.73,43.00 L 117.28,46.00 L 118.00,46.89 L 119.00,46.66 L 120.00,46.66 L 121.00,47.00 L 122.00,48.00 L 122.34,49.00 L 122.34,50.00 L 121.57,53.00 L 121.34,55.00 L 120.73,57.00 L 120.00,57.67 Z M 180.00,57.25 L 179.00,57.67 L 178.00,57.67 L 177.47,57.00 L 177.80,55.00 L 178.33,53.00 L 178.80,50.00 L 178.66,49.00 L 178.00,48.50 L 177.00,48.53 L 176.00,49.01 L 175.62,50.00 L 175.11,53.00 L 174.73,54.00 L 174.34,57.00 L 174.00,57.40 L 173.00,57.67 L 172.00,57.67 L 171.50,57.00 L 171.89,55.00 L 172.27,54.00 L 172.66,51.00 L 173.27,49.00 L 173.72,46.00 L 174.33,44.00 L 174.47,43.00 L 175.00,42.11 L 176.00,42.00 L 177.00,42.49 L 177.20,43.00 L 176.50,46.00 L 177.00,47.00 L 178.00,46.66 L 180.00,46.80 L 181.00,47.50 L 181.43,48.00 L 181.43,51.00 L 180.67,54.00 L 180.20,57.00 L 180.00,57.25 Z M 209.00,45.01 L 208.28,49.00 L 207.67,51.00 L 207.28,54.00 L 206.89,55.00 L 206.50,57.00 L 206.00,57.67 L 205.00,57.67 L 204.00,57.29 L 203.80,57.00 L 204.33,55.00 L 204.61,53.00 L 205.20,51.00 L 205.66,48.00 L 206.43,45.00 L 206.66,43.00 L 207.00,42.50 L 208.00,42.00 L 209.00,42.00 Z M 130.00,57.11 L 129.00,57.57 L 128.00,57.67 L 126.00,57.62 L 125.00,57.34 L 124.00,56.00 L 123.61,55.00 L 123.50,54.00 L 123.72,52.00 L 125.00,49.00 L 126.00,47.80 L 128.00,46.72 L 130.00,46.66 L 131.00,46.80 L 132.39,48.00 L 133.00,50.00 L 133.00,51.00 L 132.43,54.00 L 131.34,56.00 L 130.00,57.11 Z M 135.98,62.00 L 134.00,61.57 L 133.38,61.00 L 133.72,60.00 L 134.00,59.72 L 137.00,60.00 L 138.00,59.66 L 139.00,58.77 L 139.47,58.00 L 139.00,57.53 L 138.00,57.67 L 136.00,57.43 L 134.57,56.00 L 134.38,55.00 L 134.33,53.00 L 134.72,51.00 L 135.72,49.00 L 137.00,47.66 L 139.00,46.72 L 142.00,46.66 L 143.00,46.89 L 144.00,47.66 L 144.20,48.00 L 143.67,50.00 L 143.20,53.00 L 142.80,54.00 L 142.11,58.00 L 141.34,60.00 L 140.37,61.00 L 140.00,61.34 L 138.01,62.00 Z M 152.00,57.47 L 148.00,57.67 L 147.00,57.43 L 145.50,56.00 L 145.00,54.00 L 145.53,51.00 L 145.89,50.00 L 146.50,49.00 L 148.00,47.50 L 150.00,46.66 L 152.00,46.66 L 153.00,47.27 L 153.80,48.00 L 154.43,49.00 L 154.47,51.00 L 154.20,52.00 L 154.00,52.20 L 153.00,52.50 L 149.00,53.00 L 148.00,53.40 L 147.57,54.00 L 147.89,55.00 L 149.00,55.80 L 150.00,56.00 L 152.00,55.47 L 152.67,56.00 L 152.64,57.00 L 152.00,57.47 Z M 160.00,57.34 L 158.00,57.67 L 156.00,57.62 L 155.00,57.43 L 154.57,57.00 L 155.00,56.00 L 156.00,55.47 L 157.00,55.72 L 158.00,55.61 L 158.72,55.00 L 159.27,54.00 L 158.00,52.73 L 156.80,52.00 L 156.33,51.00 L 156.47,49.00 L 157.00,48.20 L 158.00,47.33 L 159.00,46.72 L 161.00,46.66 L 162.00,46.80 L 162.25,47.00 L 162.73,48.00 L 162.00,48.80 L 160.00,48.53 L 159.42,49.00 L 158.67,50.00 L 159.50,51.00 L 161.11,52.00 L 161.80,53.00 L 162.00,54.00 L 161.39,56.00 L 160.00,57.34 Z M 169.00,57.53 L 168.00,57.67 L 166.00,57.57 L 165.00,57.11 L 163.80,55.00 L 163.66,53.00 L 164.53,50.00 L 165.80,48.00 L 168.00,46.72 L 170.00,46.66 L 171.00,46.89 L 171.54,48.00 L 171.00,48.70 L 169.00,48.57 L 168.46,49.00 L 167.46,50.00 L 166.89,51.00 L 166.57,52.00 L 166.50,54.00 L 166.67,55.00 L 167.00,55.36 L 168.00,55.66 L 169.00,55.47 L 169.67,56.00 L 169.62,57.00 L 169.00,57.53 Z M 189.00,57.34 L 188.00,57.62 L 185.00,57.57 L 184.00,56.89 L 183.33,56.00 L 183.00,55.00 L 183.00,53.00 L 183.66,50.00 L 185.20,48.00 L 187.00,46.80 L 188.00,46.66 L 190.00,46.72 L 191.00,47.33 L 191.62,48.00 L 192.20,49.00 L 192.34,52.00 L 191.89,53.00 L 191.34,55.00 L 190.00,56.59 L 189.00,57.34 Z M 200.00,57.11 L 199.00,57.57 L 198.00,57.67 L 196.00,57.62 L 195.00,57.34 L 194.00,56.00 L 193.61,55.00 L 193.50,54.00 L 193.72,52.00 L 195.00,49.00 L 196.00,47.80 L 198.00,46.72 L 200.00,46.66 L 201.00,46.80 L 202.39,48.00 L 203.00,50.00 L 203.00,51.00 L 202.43,54.00 L 201.34,56.00 L 200.00,57.11 Z M 129.11,55.00 L 130.33,52.00 L 130.50,50.00 L 130.27,49.00 L 130.00,48.73 L 129.00,48.50 L 127.89,49.00 L 126.73,51.00 L 126.34,53.00 L 126.34,54.00 L 126.39,55.00 L 127.00,55.80 L 128.00,55.80 L 129.11,55.00 Z M 140.11,55.00 L 140.80,51.00 L 141.20,50.00 L 141.38,49.00 L 141.00,48.59 L 140.00,48.43 L 139.00,48.73 L 137.89,50.00 L 137.47,51.00 L 136.67,54.00 L 137.00,55.00 L 138.00,55.89 L 139.00,56.00 L 140.11,55.00 Z M 151.57,51.00 L 152.00,50.00 L 151.72,49.00 L 151.00,48.43 L 150.00,48.53 L 149.23,49.00 L 148.43,50.00 L 148.11,51.00 L 149.00,51.50 L 151.00,51.33 L 151.57,51.00 Z M 188.41,55.00 L 189.38,53.00 L 189.66,51.00 L 189.50,49.00 L 189.00,48.53 L 188.00,48.53 L 187.00,49.30 L 186.50,50.00 L 185.73,52.00 L 185.53,53.00 L 185.53,55.00 L 186.00,55.58 L 187.00,55.89 L 188.00,55.41 L 188.41,55.00 Z M 199.11,55.00 L 200.33,52.00 L 200.50,50.00 L 200.27,49.00 L 200.00,48.73 L 199.00,48.50 L 197.89,49.00 L 196.73,51.00 L 196.34,53.00 L 196.34,54.00 L 196.39,55.00 L 197.00,55.72 L 198.00,55.80 L 199.11,55.00 Z" fill="#C6002A" fill-rule="evenodd"/>
 </svg></script>
@@ -543,7 +749,7 @@ function bevestig(btn,ok,waarde,label){
 
 /* 1. Palet */
 const palet=document.getElementById('palet');
-/* Kopieerformaten. Tinten volgen hetzelfde formaat; hun CSS-variabele krijgt -20, zoals in avans-tokens.css. */
+/* Kopieerformaten voor de merkkleuren. De 20%-tinten staan bewust niet in het palet: die zijn alleen voor tabellen. */
 const FORMATEN=[
   {id:'hex',naam:'HEX',maak:(hex)=>hex},
   {id:'rgb',naam:'RGB',maak:(hex)=>'rgb('+rgbVan(hex).join(', ')+')'},
@@ -554,9 +760,8 @@ function rgbVan(hex){const n=hex.replace('#','');return [0,2,4].map(i=>parseInt(
 let formaat=FORMATEN[0];
 const knoppenPalet=[];
 function zetLabels(){
-  knoppenPalet.forEach(({btn,k,tint})=>{
-    const hex=tint?k.tint:k.hex,v=tint?k.id+'-20':k.id;
-    btn.setAttribute('aria-label',(tint?'Kopieer 20%-tint van ':'Kopieer ')+k.naam+' als '+formaat.naam+': '+formaat.maak(hex,v));
+  knoppenPalet.forEach(({btn,k})=>{
+    btn.setAttribute('aria-label','Kopieer '+k.naam+' als '+formaat.naam+': '+formaat.maak(k.hex,k.id));
   });
 }
 KLEUREN.forEach((k,i)=>{
@@ -564,15 +769,12 @@ KLEUREN.forEach((k,i)=>{
   const el=document.createElement('div');el.className='kleur'+(i===0?' hoofd':'');
   el.innerHTML=`<button type="button" class="vol" style="background:${k.hex};color:${titel}">
       <span class="naam">${k.naam}</span><span class="kopieer-label"></span></button>
-    <div class="info"><span class="hex">${k.hex}</span><span><b>RGB</b>${k.rgb}</span><span><b>CMYK</b>${k.cmyk}</span><span><b>PMS</b>${k.pms.replace("PMS ","")}</span></div>
-    <button type="button" class="tint" style="background:${k.tint}"><b>20%</b> ${k.tint}<span class="kopieer-label"></span></button>`;
-  const [b1,b2]=el.querySelectorAll('button');
-  [[b1,false],[b2,true]].forEach(([btn,tint])=>{
-    knoppenPalet.push({btn,k,tint});
-    btn.addEventListener('click',async()=>{
-      const f=formaat,waarde=f.maak(tint?k.tint:k.hex,tint?k.id+'-20':k.id);
-      bevestig(btn,await kopieer(waarde),f.naam+' van '+(tint?'20%-tint ':'')+k.naam+': '+waarde,(f.kort||f.naam)+' gekopieerd');
-    });
+    <div class="info"><span class="hex">${k.hex}</span><span><b>RGB</b>${k.rgb}</span><span><b>CMYK</b>${k.cmyk}</span><span><b>PMS</b>${k.pms.replace("PMS ","")}</span></div>`;
+  const btn=el.querySelector('button');
+  knoppenPalet.push({btn,k});
+  btn.addEventListener('click',async()=>{
+    const f=formaat,waarde=f.maak(k.hex,k.id);
+    bevestig(btn,await kopieer(waarde),f.naam+' van '+k.naam+': '+waarde,(f.kort||f.naam)+' gekopieerd');
   });
   palet.appendChild(el);
 });
@@ -631,8 +833,7 @@ tekenAvatile();
    Combinaties overgenomen uit de merkgids: kleurgebruik-titels-combinaties.png,
    headline-typografie-en-kleur-voorbeelden.png en kleurgebruik-bodytekst-combinaties.png.
    Tekstkleuren zijn uitsluitend zwart, wit en Avans Rood.
-   Lichtgrijs en lichtlila hebben in de merkgids geen HEX-code: lichtgrijs is gemeten in de beelden,
-   lichtlila is de 20%-tint van Kalm Paars (merkgids: 'Kalm Paars + lichtlila tint'). */
+   Lichtgrijs heeft in de merkgids geen HEX-code: de waarde is gemeten in de merkgidsbeelden. */
 const TEKSTKLEUR={'zwart':{naam:'zwart',hex:'#000000'},'wit':{naam:'wit',hex:'#FFFFFF'},'avans-rood':{naam:'Avans Rood',hex:'#C6002A'}};
 const kl=id=>KLEUREN.find(k=>k.id===id);
 const ACHTERGROND=[
@@ -642,7 +843,6 @@ const ACHTERGROND=[
   {id:'helder-rood',naam:'Helder Rood',hex:kl('helder-rood').hex,titel:['wit'],body:['wit']},
   {id:'sociaal-oranje',naam:'Sociaal Oranje',hex:kl('sociaal-oranje').hex,titel:['wit'],body:['wit']},
   {id:'kalm-paars',naam:'Kalm Paars',hex:kl('kalm-paars').hex,titel:['avans-rood','zwart'],body:['zwart']},
-  {id:'kalm-paars-20',naam:'Kalm Paars 20%',hex:kl('kalm-paars').tint,titel:['zwart'],body:['zwart']},
   {id:'actief-blauw',naam:'Actief Blauw',hex:kl('actief-blauw').hex,titel:['wit'],body:['wit']},
   {id:'slim-donkerblauw',naam:'Slim Donkerblauw',hex:kl('slim-donkerblauw').hex,titel:['wit'],body:['wit']},
   {id:'beeld',naam:'Beeld (foto)',hex:'radial-gradient(circle at 70% 30%,#3B4A5C,#0B0F14)',beeld:true}
@@ -784,7 +984,7 @@ document.getElementById('kopieer-tabel').addEventListener('click',async()=>{
   }
   if(uitkomst==='fout'&&kopieerViaEvent(html,tekst))uitkomst='beide';
   if(uitkomst==='fout'&&await kopieer(tekst))uitkomst='tekst';
-  s.textContent=uitkomst==='beide'?'Tabel gekopieerd. Plak in Word, PowerPoint of Excel.':
+  s.textContent=uitkomst==='beide'?'Tabel gekopieerd. Plak in Word en PowerPoint met Opmaak van bron behouden.':
     uitkomst==='tekst'?'Tabel gekopieerd als tekst, zonder opmaak. Excel herkent rijen en kolommen wel.':
     'Kopiëren lukte niet in deze browser. Probeer een andere browser.';
   btn.focus();clearTimeout(s._t);s._t=setTimeout(()=>{s.textContent='';},6000);
@@ -1056,6 +1256,174 @@ document.querySelectorAll('.actie[data-comp]').forEach(btn=>{
       bezig(p.then(()=>meld('comp','Compositie gekopieerd als afbeelding')).catch(()=>meld('comp','Kopiëren als afbeelding is hier geblokkeerd. Gebruik PNG downloaden.')));
     }
   });
+});
+
+/* ===== Typografietester =====
+   Regels uit de merkgids (Titels — drie niveaus, Richtlijnen aantal woorden en puntgrootte, Body tekst,
+   PowerPoint-uitzondering). Waar de merkgids geen getal geeft, staat dat bij de regel. */
+const TY={
+  exp:{naam:'Expressieve titel',font:'Sofia Sans Extra Condensed',gewicht:800,cursief:true,kapitalen:true,
+       lh:[80,90],lhStd:85,woorden:{digi:8,print:10},min:{digi:100,print:30},std:{digi:100,print:30},bereik:{digi:[40,300],print:[12,200]},
+       ppt:{font:'Arial Narrow',vet:true,cursief:true},
+       tekst:'Wij maken het onderwijs van morgen'},
+  tac:{naam:'Tactische titel',font:'Sofia Sans Extra Condensed',gewicht:800,cursief:false,kapitalen:false,
+       lh:null,lhStd:100,woorden:{digi:20,print:20},min:{digi:50,print:12},std:{digi:50,print:16},bereik:{digi:[20,200],print:[8,120]},
+       ppt:{font:'Arial Narrow',vet:true,cursief:true},
+       tekst:'Zo laat je zien wat jouw onderzoek oplevert voor de praktijk'},
+  inl:{naam:'Inleiding',font:'Hanken Grotesk',gewicht:400,cursief:false,kapitalen:false,
+       lh:[110,130],lhStd:120,woorden:null,min:null,std:{digi:21,print:30},bereik:{digi:[10,60],print:[8,60]},
+       ppt:{font:'Arial',vet:false,cursief:false},
+       tekst:'Onderzoek bij Avans Hogeschool gebeurt niet op afstand. Je werkt samen met docenten, studenten en het werkveld aan vragen die er nu toe doen.'},
+  body:{naam:'Bodytekst',font:'Hanken Grotesk',gewicht:400,cursief:false,kapitalen:false,
+       lh:[130,150],lhStd:140,woorden:null,min:null,std:{digi:16,print:20},bereik:{digi:[8,40],print:[6,40]},
+       ppt:{font:'Arial',vet:false,cursief:false},
+       tekst:'Lopende tekst is kleiner dan een inleiding en krijgt meer regelafstand. Zo blijft een lange tekst prettig om te lezen. Houd een regel rond de 12 woorden. Schrijf in korte, actieve zinnen en spreek je lezer direct aan.\n\nCijfers schrijf je altijd in getallen, ook onder de 20. Een datum schrijf je voluit, zoals 3 september. Het jaartal laat je weg als het duidelijk is.'}
+};
+const ty={soort:'exp',context:'digi',weergave:'avans',teksten:{},maat:{},lh:{}};
+Object.keys(TY).forEach(k=>{ty.teksten[k]=TY[k].tekst;ty.lh[k]=TY[k].lhStd;ty.maat[k]={digi:TY[k].std.digi,print:TY[k].std.print};});
+const eenheid=()=>ty.context==='digi'?'px':'pt';
+const telWoorden=s=>s.trim().split(/\s+/).filter(w=>/[\p{L}\p{N}]/u.test(w)).length;
+const hoofd=s=>s.toLocaleUpperCase('nl-NL');
+const escT=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* Staat Arial Narrow op deze computer? (alleen voor de uitleg bij de PowerPoint-weergave) */
+function heeftFont(naam){
+  const c=document.createElement('canvas').getContext('2d'),s='mmmmmmmmmmlliWW';
+  return ['monospace','serif'].some(b=>{c.font='72px '+b;const w0=c.measureText(s).width;c.font=`72px "${naam}",${b}`;return c.measureText(s).width!==w0;});
+}
+const arialNarrow=heeftFont('Arial Narrow');
+
+function stijl(soort,variant){
+  const d=TY[soort],m=ty.maat[soort][ty.context],lh=ty.lh[soort]/100;
+  if(variant==='ppt'){
+    const pt=ty.context==='digi'?Math.round(m*0.75*10)/10:m;
+    return {family:d.ppt.font==='Arial Narrow'?"'Arial Narrow',Arial,sans-serif":'Arial,Helvetica,sans-serif',
+      weight:d.ppt.vet?'bold':'normal',style:d.ppt.cursief?'italic':'normal',size:pt,unit:'pt',lh:Math.round(pt*lh*10)/10};
+  }
+  /* Eerst de Windows-familienaam (Sofia Sans Extra Condensed ExtraBold), dan de gewone naam. */
+  const fam=d.font==='Sofia Sans Extra Condensed'?"'Sofia Sans Extra Condensed ExtraBold','Sofia Sans Extra Condensed','Arial Narrow',sans-serif":"'Hanken Grotesk',Arial,sans-serif";
+  return {family:fam,weight:d.gewicht===800?'800':'400',style:d.cursief?'italic':'normal',size:m,unit:eenheid(),lh:Math.round(m*lh*10)/10};
+}
+const alineas=(soort)=>{const s=TY[soort].kapitalen?hoofd(ty.teksten[soort]):ty.teksten[soort];return s.split(/\n\s*\n/).map(a=>a.trim()).filter(Boolean);};
+function checks(soort){
+  const d=TY[soort],c=ty.context,cn=c==='digi'?'digitaal/social media':'print A4',u=eenheid(),m=ty.maat[soort][c],lh=ty.lh[soort],out=[];
+  const w=telWoorden(ty.teksten[soort]);
+  if(w===0)out.push(['nee','Typ een tekst.']);
+  if(d.woorden){const max=d.woorden[c];out.push(w<=max?['ok',`${w} woorden. Richtlijn ${cn}: 1 tot ${max}.`]:['nee',`${w} woorden. Te lang: richtlijn ${cn} is 1 tot ${max} woorden.${soort==='exp'?' Gebruik voor langere titels een tactische titel.':''}`]);}
+  else if(soort==='body')out.push(['info',`${w} woorden. Ideale regellengte: rond de 12 woorden per regel.`]);
+  else out.push(['info',`${w} woorden. Een inleiding is kleiner dan de titel en groter dan de lopende tekst.`]);
+  if(d.min){const mn=d.min[c];out.push(m>=mn?['ok',`Grootte ${m} ${u}. Minimaal ${mn} ${u} (${cn}).`]:['nee',`Grootte ${m} ${u} is te klein. Minimaal ${mn} ${u} (${cn}).`]);}
+  else out.push(['info',`Grootte ${m} ${u}. De merkgids legt geen minimum vast. Voorbeeld uit de merkgids: ${soort==='inl'?'30 pt met 36 pt regelafstand':'20 pt met 28 pt regelafstand'}.`]);
+  if(d.lh)out.push(lh>=d.lh[0]&&lh<=d.lh[1]?['ok',`Regelafstand ${lh}%. Richtlijn: ${d.lh[0]} tot ${d.lh[1]}%.`]:['nee',`Regelafstand ${lh}% valt buiten de richtlijn van ${d.lh[0]} tot ${d.lh[1]}%.`]);
+  else out.push(lh>TY.exp.lh[1]?['ok',`Regelafstand ${lh}%. Richtlijn: iets ruimer dan bij een expressieve titel (die is 80 tot 90%). De merkgids geeft geen vast getal.`]:['nee',`Regelafstand ${lh}% is niet ruimer dan bij een expressieve titel (80 tot 90%).`]);
+  if(soort==='exp'){
+    out.push(['ok','Alleen hoofdletters. De toolkit zet je tekst om.']);
+    out.push(['ok','Cursief: Sofia Sans Extra Condensed Extra Bold Italic.']);
+    if(/[JQ]/.test(hoofd(ty.teksten.exp))&&lh<=90)out.push(['info','Raakt de staart van een letter (zoals de J) de regel eronder? Vergroot de regelafstand dan iets.']);
+  }
+  if(soort==='tac'){out.push(['ok','Hoofdletters en kleine letters mogen allebei.']);out.push(['ok','Recht, niet cursief: Sofia Sans Extra Condensed Extra Bold.']);}
+  if(soort==='inl'||soort==='body')out.push(['ok','Hanken Grotesk Regular.']);
+  return out;
+}
+function specTekst(soort){
+  const d=TY[soort];
+  const avans=d.font==='Hanken Grotesk'?'Hanken Grotesk Regular':`Sofia Sans Extra Condensed Extra Bold${d.cursief?' Italic':''}`;
+  const ppt=`${d.ppt.font}${d.ppt.vet?' Bold':' Regular'}${d.ppt.cursief?' Italic':''}`;
+  return ty.weergave==='ppt'?`PowerPoint: ${ppt}, in plaats van ${avans}.`:`${avans}${d.kapitalen?', alleen hoofdletters':''}. In PowerPoint: ${ppt}.`;
+}
+function tekenTy(){
+  const s=ty.soort,st=stijl(s,ty.weergave);
+  const pv=document.getElementById('ty-preview');
+  pv.innerHTML=alineas(s).map(a=>`<p>${escT(a)}</p>`).join('')||'<p>&nbsp;</p>';
+  Object.assign(pv.style,{fontFamily:st.family,fontWeight:st.weight,fontStyle:st.style,fontSize:st.size+st.unit,lineHeight:st.lh+st.unit,color:s==='exp'?'var(--title)':'var(--ink)'});
+  document.getElementById('ty-spec').textContent=specTekst(s);
+  const c=checks(s);
+  document.getElementById('ty-checks').innerHTML=c.map(([k,tx])=>`<li class="ty-${k}"><span class="i" aria-hidden="true">${k==='ok'?'✓':k==='nee'?'✗':'i'}</span><span><span class="sr">${k==='ok'?'In orde: ':k==='nee'?'Buiten de richtlijn: ':'Info: '}</span>${tx}</span></li>`).join('');
+  const n=c.filter(x=>x[0]==='nee').length,sam=document.getElementById('ty-samenvatting'),z=n?`${n} ${n===1?'punt':'punten'} buiten de richtlijn`:'Alles binnen de richtlijn';
+  if(sam.textContent!==z)sam.textContent=z;
+  const plaktip='<b>Plak in Word en PowerPoint met Opmaak van bron behouden.</b> Klik na het plakken op het plakpictogram en kies Opmaak van bron behouden (of druk op Ctrl en daarna O). Anders neemt het programma het lettertype van je document over. ';
+  document.getElementById('ty-noot').innerHTML=plaktip+(ty.weergave==='ppt'
+    ?(arialNarrow?'':'Arial Narrow staat niet op deze computer, dus dit voorbeeld toont een vervanging. In PowerPoint (met Office) is Arial Narrow er wel.')
+    :'Het lettertype komt alleen goed over als het geïnstalleerd is. Installeer de fonts via Fonts downloaden hieronder.');
+}
+/* Groottes en regelafstand: waarden buiten de richtlijn blijven mogelijk, zodat de controle ze kan melden. */
+function bouwMaten(){
+  const el=document.getElementById('ty-maten');el.innerHTML='';const s=ty.soort,[mn,mx]=TY[s].bereik[ty.context];
+  maakSchuif(el,'ty-m',`Grootte (${eenheid()})`,mn,mx,1,ty.maat[s][ty.context],eenheid(),v=>{ty.maat[s][ty.context]=v;tekenTy();});
+  maakSchuif(el,'ty-lh','Regelafstand (%)',70,170,5,ty.lh[s],'procent',v=>{ty.lh[s]=v;tekenTy();});
+}
+const tyTekst=document.getElementById('ty-tekst');
+function zetSoort(s){ty.soort=s;tyTekst.value=ty.teksten[s];bouwMaten();tekenTy();}
+tyTekst.addEventListener('input',()=>{ty.teksten[ty.soort]=tyTekst.value;tekenTy();});
+keuzeChips(document.getElementById('ty-soort'),'tysoort',Object.keys(TY).map(k=>({id:k,naam:TY[k].naam})),'exp',zetSoort);
+keuzeChips(document.getElementById('ty-context'),'tycontext',[{id:'digi',naam:'Digitaal / social media'},{id:'print',naam:'Print A4'}],'digi',c=>{ty.context=c;bouwMaten();tekenTy();});
+keuzeChips(document.getElementById('ty-weergave'),'tyweergave',[{id:'avans',naam:'Avans-fonts'},{id:'ppt',naam:'PowerPoint'}],'avans',w=>{ty.weergave=w;tekenTy();});
+zetSoort('exp');
+
+function tyHtml(variant){
+  const s=ty.soort,st=stijl(s,variant);
+  const css=`font-family:${st.family};font-weight:${st.weight};font-style:${st.style};font-size:${st.size}${st.unit};line-height:${st.lh}${st.unit};margin:0 0 ${Math.round(st.size*0.6)}${st.unit} 0;`;
+  const al=alineas(s);
+  return {html:'<meta charset="utf-8">'+al.map(a=>`<p style="${css}">${escT(a).replace(/\n/g,'<br>')}</p>`).join(''),tekst:al.join('\n\n')};
+}
+async function kopieerRijk(html,tekst){
+  if(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem){
+    try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([tekst],{type:'text/plain'})})]);return 'beide';}catch(e){}
+  }
+  if(kopieerViaEvent(html,tekst))return 'beide';
+  return (await kopieer(tekst))?'tekst':'fout';
+}
+function tyMeld(id,tx){const s=document.getElementById(id);s.textContent=tx;clearTimeout(s._t);s._t=setTimeout(()=>{s.textContent='';},6000);}
+document.getElementById('ty-kopieer').addEventListener('click',async()=>{
+  const {html,tekst}=tyHtml('avans'),r=await kopieerRijk(html,tekst);
+  tyMeld('ty-status',r==='beide'?TY[ty.soort].naam+' gekopieerd. Plak met Opmaak van bron behouden.':r==='tekst'?'Gekopieerd als platte tekst, zonder opmaak':'Kopiëren lukte niet in deze browser');
+});
+document.getElementById('ty-ppt').addEventListener('click',async()=>{
+  const {html,tekst}=tyHtml('ppt'),r=await kopieerRijk(html,tekst);
+  tyMeld('ty-status',r==='beide'?'Gekopieerd voor PowerPoint ('+TY[ty.soort].ppt.font+'). Plak met Opmaak van bron behouden.':r==='tekst'?'Gekopieerd als platte tekst, zonder opmaak':'Kopiëren lukte niet in deze browser');
+});
+
+/* Fontdownload: de fonts komen uit de @font-face-regels van deze pagina (geen dubbele kopie). */
+const FONTBESTAND={'Hanken Grotesk|400|normal':'HankenGrotesk-Regular.ttf','Hanken Grotesk|600|normal':'HankenGrotesk-SemiBold.ttf','Hanken Grotesk|700|normal':'HankenGrotesk-Bold.ttf','Sofia Sans Extra Condensed|800|normal':'SofiaSansExtraCondensed-ExtraBold.ttf','Sofia Sans Extra Condensed|800|italic':'SofiaSansExtraCondensed-ExtraBoldItalic.ttf'};
+function fontBestanden(){
+  const uit=[];
+  for(const sh of document.styleSheets){let regels;try{regels=sh.cssRules;}catch(e){continue;}
+    for(const r of regels){if(!(r instanceof CSSFontFaceRule))continue;
+      const fam=r.style.getPropertyValue('font-family').replace(/['"]/g,'').trim(),w=r.style.getPropertyValue('font-weight').trim(),st=r.style.getPropertyValue('font-style').trim()||'normal';
+      const naam=FONTBESTAND[fam+'|'+w+'|'+st],m=r.style.getPropertyValue('src').match(/base64,([A-Za-z0-9+/=]+)/);
+      if(naam&&m){const bin=atob(m[1]),b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);uit.push({naam,data:b});}
+    }}
+  return uit;
+}
+/* Minimale zip (zonder compressie). */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;};
+function maakZip(bestanden){
+  const enc=new TextEncoder(),delen=[],centraal=[];let pos=0;
+  for(const f of bestanden){
+    const naam=enc.encode(f.naam),crc=crc32(f.data),n=f.data.length;
+    const kop=new DataView(new ArrayBuffer(30));
+    kop.setUint32(0,0x04034b50,true);kop.setUint16(4,20,true);kop.setUint16(8,0,true);kop.setUint32(14,crc,true);kop.setUint32(18,n,true);kop.setUint32(22,n,true);kop.setUint16(26,naam.length,true);
+    delen.push(new Uint8Array(kop.buffer),naam,f.data);
+    const c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint32(16,crc,true);c.setUint32(20,n,true);c.setUint32(24,n,true);c.setUint16(28,naam.length,true);c.setUint32(42,pos,true);
+    centraal.push(new Uint8Array(c.buffer),naam);
+    pos+=30+naam.length+n;
+  }
+  const cLen=centraal.reduce((s,x)=>s+x.length,0),eind=new DataView(new ArrayBuffer(22));
+  eind.setUint32(0,0x06054b50,true);eind.setUint16(8,bestanden.length,true);eind.setUint16(10,bestanden.length,true);eind.setUint32(12,cLen,true);eind.setUint32(16,pos,true);
+  return new Blob([...delen,...centraal,new Uint8Array(eind.buffer)],{type:'application/zip'});
+}
+document.getElementById('ty-fonts').addEventListener('click',async()=>{
+  const enc=new TextEncoder(),fonts=fontBestanden();
+  if(fonts.length!==5){tyMeld('ty-fonts-status','De fonts konden niet worden gelezen.');return;}
+  const leesmij='Avans-fonts: Hanken Grotesk en Sofia Sans Extra Condensed\r\n\r\nInstalleren (Windows en macOS): dubbelklik op elk .ttf-bestand en kies Installeren.\r\nBeide fonts vallen onder de SIL Open Font License 1.1, zie de OFL-bestanden.\r\n\r\nIn PowerPoint gebruik je volgens de merkgids Arial Narrow Bold Italic in plaats van Sofia Sans\r\nen Arial Regular in plaats van Hanken Grotesk.\r\n';
+  const zip=maakZip(fonts.concat([
+    {naam:'OFL-HankenGrotesk.txt',data:enc.encode(document.getElementById('ofl-hanken').textContent.replace(/\r?\n/g,'\r\n'))},
+    {naam:'OFL-SofiaSansExtraCondensed.txt',data:enc.encode(document.getElementById('ofl-sofia').textContent.replace(/\r?\n/g,'\r\n'))},
+    {naam:'LEESMIJ.txt',data:enc.encode(leesmij)}]));
+  const r=await bewaar('avans-fonts.zip',zip,'application/zip');
+  tyMeld('ty-fonts-status',r==='ok'?'Fonts gedownload (avans-fonts.zip)':r==='geannuleerd'?'Download geannuleerd':'Downloaden lukte niet');
 });
 })();
 </script>
